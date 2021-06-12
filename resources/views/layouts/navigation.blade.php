@@ -22,6 +22,11 @@
                     </x-nav-link>
                 </div>
                 <div class="hidden space-x-8 sm:-my-px sm:ml-2 sm:flex">
+                    <x-nav-link :href="route('kids.index')" :active="request()->routeIs('dashboard')">
+                        {{ __('Bombelki') }}
+                    </x-nav-link>
+                </div>
+                <div class="hidden space-x-8 sm:-my-px sm:ml-2 sm:flex">
                     <x-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')">
                         {{ __('Znajomi') }}
                     </x-nav-link>
@@ -45,9 +50,12 @@
 
                     <x-slot name="content">
                         <!-- Authentication -->
-                        <x-dropdown-link href="/users/list">{{ __('Użytkownicy') }}
+                        <x-dropdown-link href="/users/list">{{ __('Użytkownicy') }}</x-dropdown-link>
 
-                        </x-dropdown-link>
+                        <x-dropdown-link href="/accounts/list">{{ __('Konta') }}</x-dropdown-link>
+
+                        <x-dropdown-link href="{{ route('kids.index') }}">{{ __('Bombelki') }}</x-dropdown-link>
+
                         <form method="POST" action="{{ route('logout') }}">
                             @csrf
 

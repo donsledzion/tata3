@@ -2,32 +2,22 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\User;
-use Illuminate\Contracts\Foundation\Application;
-use Illuminate\Contracts\View\Factory;
-use Illuminate\Contracts\View\View;
+use App\Models\Kid;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
+use Illuminate\View\View;
 
-class UserController extends Controller
+class KidController extends Controller
 {
     /**
      * Display a listing of the resource.
      *
      * @return View
      */
-    public function index()
-    {/*
-        return view('users.index',[
-            'users' => User::all()
-        ]);
-    */
-        $result =
-            User::join('user_status', 'user_status.id', '=', 'users.status_id')
-                ->get(['users.id', 'users.email', 'users.name', 'users.email_verified_at',
-                        'user_status.name as status']);
-        return view('users.index',[
-            'users' => $result
+    public function index(): View
+    {
+        return view("kids.index", [
+        'kids' => Kid::join('accounts','accounts.id','=','kids.account_id')
+            ->get(['kids.*','accounts.name as account_name'])
         ]);
     }
 
@@ -55,10 +45,10 @@ class UserController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  int  $id
+     * @param  \App\Models\Kid  $kid
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show(Kid $kid)
     {
         //
     }
@@ -66,10 +56,10 @@ class UserController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  int  $id
+     * @param  \App\Models\Kid  $kid
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function edit(Kid $kid)
     {
         //
     }
@@ -78,10 +68,10 @@ class UserController extends Controller
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
+     * @param  \App\Models\Kid  $kid
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, Kid $kid)
     {
         //
     }
@@ -89,10 +79,10 @@ class UserController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  int  $id
+     * @param  \App\Models\Kid  $kid
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(Kid $kid)
     {
         //
     }

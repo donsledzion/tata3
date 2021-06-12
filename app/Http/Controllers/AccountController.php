@@ -2,43 +2,37 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\User;
-use Illuminate\Contracts\Foundation\Application;
-use Illuminate\Contracts\View\Factory;
+use App\Models\Account;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
 
-class UserController extends Controller
+class AccountController extends Controller
 {
     /**
      * Display a listing of the resource.
      *
      * @return View
      */
-    public function index()
-    {/*
-        return view('users.index',[
-            'users' => User::all()
-        ]);
-    */
-        $result =
-            User::join('user_status', 'user_status.id', '=', 'users.status_id')
-                ->get(['users.id', 'users.email', 'users.name', 'users.email_verified_at',
-                        'user_status.name as status']);
-        return view('users.index',[
-            'users' => $result
+    public function index(): View
+    {
+        $result = Account::join('account_user_permission', 'account_user_permission.account_id', '=', 'accounts.id')
+            ->join('users', 'users.id','=','account_user_permission.user_id')
+            ->join('permissions', 'permissions.id','=','account_user_permission.permission_id')
+            ->get(['accounts.id', 'accounts.name', 'accounts.avatar', 'users.name as user', 'permissions.name as permission']);
+        $result = Account::all();
+        return view('accounts.index', [
+            'accounts' => $result
         ]);
     }
 
     /**
      * Show the form for creating a new resource.
      *
-     * @return \Illuminate\Http\Response
+     * @return View
      */
-    public function create()
+    public function create(): View
     {
-        //
+        return view('accounts.create');
     }
 
     /**
@@ -55,10 +49,10 @@ class UserController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  int  $id
+     * @param  \App\Models\Account  $account
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show(Account $account)
     {
         //
     }
@@ -66,10 +60,10 @@ class UserController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  int  $id
+     * @param  \App\Models\Account  $account
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function edit(Account $account)
     {
         //
     }
@@ -78,10 +72,10 @@ class UserController extends Controller
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
+     * @param  \App\Models\Account  $account
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, Account $account)
     {
         //
     }
@@ -89,10 +83,10 @@ class UserController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  int  $id
+     * @param  \App\Models\Account  $account
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(Account $account)
     {
         //
     }

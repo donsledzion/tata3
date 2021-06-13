@@ -50,9 +50,9 @@
 
                     <x-slot name="content">
                         <!-- Authentication -->
-                        <x-dropdown-link href="/users/list">{{ __('Użytkownicy') }}</x-dropdown-link>
+                        <x-dropdown-link href="{{ route('users.index') }}">{{ __('Użytkownicy') }}</x-dropdown-link>
 
-                        <x-dropdown-link href="/accounts/list">{{ __('Konta') }}</x-dropdown-link>
+                        <x-dropdown-link href="{{ route('accounts.index') }}">{{ __('Konta') }}</x-dropdown-link>
 
                         <x-dropdown-link href="{{ route('kids.index') }}">{{ __('Bombelki') }}</x-dropdown-link>
 

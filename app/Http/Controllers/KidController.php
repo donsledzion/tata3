@@ -17,7 +17,8 @@ class KidController extends Controller
     {
         return view("kids.index", [
         'kids' => Kid::join('accounts','accounts.id','=','kids.account_id')
-            ->get(['kids.*','accounts.name as account_name'])
+            ->select(['kids.*','accounts.name as account_name'])
+            ->paginate(5)
         ]);
     }
 

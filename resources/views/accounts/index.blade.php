@@ -1,9 +1,20 @@
 
     <x-app-layout>
         <x-slot name="header">
-            <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-                {{ __('Konta') }}
-            </h2>
+            <div class="grid grid-cols-2">
+                <div class="float-left">
+                    <h1 class="font-semibold text-xl text-gray-800 leading-tight">
+                        {{ __('Konta') }}
+                    </h1>
+                </div>
+                <div class="float-right">
+                    <a class="float-right" href="{{route('accounts.create')}}">
+                        <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
+                            Dodaj konto
+                        </button>
+                    </a>
+                </div>
+            </div>
         </x-slot>
 
         <!-- component -->
@@ -87,12 +98,21 @@
                         @endforeach
                     </td>
                     <td>
-                        <a href="#" class="bg-blue-500 p-2 text-white hover:shadow-lg text-xs font-thin">Edit</a>
-                        <a href="#" class="bg-red-500 p-2 text-white hover:shadow-lg text-xs font-thin">Remove</a>
+                        <a href="{{ route('accounts.show',$account->id) }}"     class="bg-green-500 p-2 text-white hover:shadow-lg text-xs fo   nt-thin">Podgląd</a>
+                        <a href="{{ route('accounts.edit',$account->id) }}"     class="bg-blue-500 p-2 text-white hover:shadow-lg text-xs font-thin">Edit</a>
+                        <button class="bg-red-500 p-2 delete text-white hover:shadow-lg text-xs font-thin" data-id="{{ $account->id }}">Usuń</button>
                     </td>
                 </tr>
                 @endforeach
                 </tbody>
             </table>
+            {{ $accounts->links() }}
+            @section('javascript')
+                const deleteUrl = "{{ url('accounts') }}/" ;
+            @endsection
+
+            @section('js-files')
+                <script src="{{ asset('js/delete.js') }}" ></script>
+            @endsection
         </div>
     </x-app-layout>

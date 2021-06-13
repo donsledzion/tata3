@@ -3,9 +3,11 @@
 namespace App\Http\Controllers;
 
 use App\Models\User;
+use http\Env\Response;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
@@ -24,8 +26,9 @@ class UserController extends Controller
     */
         $result =
             User::join('user_status', 'user_status.id', '=', 'users.status_id')
-                ->get(['users.id', 'users.email', 'users.name', 'users.email_verified_at',
-                        'user_status.name as status']);
+                ->select(['users.id', 'users.email', 'users.name', 'users.email_verified_at',
+                        'user_status.name as status'])
+                ->paginate(5);
         return view('users.index',[
             'users' => $result
         ]);
@@ -90,10 +93,21 @@ class UserController extends Controller
      * Remove the specified resource from storage.
      *
      * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * @return JsonResponse
      */
-    public function destroy($id)
+    public function destroy(User $user): JsonResponse
     {
-        //
+        try {
+            $user->delete();
+            return response()->json([
+                'status' => 'success'
+            ]);
+        } catch (\Exception $e){
+            return response()->json([
+                'status' => 'fail',
+                'message' => 'Wystąpił błąd!'
+            ])->setStatusCode(500);
+        }
+
     }
 }

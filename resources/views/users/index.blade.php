@@ -68,12 +68,21 @@
                     <td class="p-2 border-r">{{$user->email}}</td>
                     <td class="p-2 border-r">{{$user->status}}</td>
                     <td>
-                        <a href="#" class="bg-blue-500 p-2 text-white hover:shadow-lg text-xs font-thin">Edit</a>
-                        <a href="#" class="bg-red-500 p-2 text-white hover:shadow-lg text-xs font-thin">Remove</a>
+                        <button class="bg-blue-500 p-2 edit text-white hover:shadow-lg text-xs font-thin" data-id="{{ $user->id }}">Edytuj</button>
+                        <button class="bg-red-500 p-2 delete text-white hover:shadow-lg text-xs font-thin" data-id="{{ $user->id }}">Usuń</button>>
                     </td>
                 </tr>
                 @endforeach
                 </tbody>
             </table>
+            {{ $users->links() }}
+            @section('javascript')
+                const deleteUrl = "{{ url('users') }}/" ;
+            @endsection
+
+            @section('js-files')
+                <script src="{{ asset('js/delete.js') }}" ></script>
+            @endsection
         </div>
+
     </x-app-layout>

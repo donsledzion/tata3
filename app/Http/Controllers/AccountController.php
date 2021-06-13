@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Models\Account;
 use Illuminate\Contracts\View\View;
+use Illuminate\Http\JsonResponse;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 
 class AccountController extends Controller
@@ -15,11 +17,7 @@ class AccountController extends Controller
      */
     public function index(): View
     {
-        $result = Account::join('account_user_permission', 'account_user_permission.account_id', '=', 'accounts.id')
-            ->join('users', 'users.id','=','account_user_permission.user_id')
-            ->join('permissions', 'permissions.id','=','account_user_permission.permission_id')
-            ->get(['accounts.id', 'accounts.name', 'accounts.avatar', 'users.name as user', 'permissions.name as permission']);
-        $result = Account::all();
+        $result = Account::paginate(5);
         return view('accounts.index', [
             'accounts' => $result
         ]);
@@ -38,34 +36,40 @@ class AccountController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
+     * @param  Request  $request
+     * @return RedirectResponse
      */
-    public function store(Request $request)
+    public function store(Request $request): RedirectResponse
     {
-        //
+        $account = new Account($request->all());
+        $account->save();
+        return redirect(route('accounts.index'));
     }
 
     /**
      * Display the specified resource.
      *
      * @param  \App\Models\Account  $account
-     * @return \Illuminate\Http\Response
+     * @return View
      */
-    public function show(Account $account)
+    public function show(Account $account): VIew
     {
-        //
+        return view("accounts.show", [
+            'account' => $account
+        ] );
     }
 
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\Models\Account  $account
-     * @return \Illuminate\Http\Response
+     * @param  Account  $account
+     * @return View
      */
-    public function edit(Account $account)
+    public function edit(Account $account): View
     {
-        //
+        return view('accounts.edit', [
+           'account' => $account
+        ]);
     }
 
     /**
@@ -73,21 +77,33 @@ class AccountController extends Controller
      *
      * @param  \Illuminate\Http\Request  $request
      * @param  \App\Models\Account  $account
-     * @return \Illuminate\Http\Response
+     * @return RedirectResponse
      */
-    public function update(Request $request, Account $account)
+    public function update(Request $request, Account $account): RedirectResponse
     {
-        //
+        $account->fill($request->all());
+        $account->save();
+        return redirect(route('accounts.index'));
     }
 
     /**
      * Remove the specified resource from storage.
      *
      * @param  \App\Models\Account  $account
-     * @return \Illuminate\Http\Response
+     * @return : JsonResponse
      */
-    public function destroy(Account $account)
+    public function destroy(Account $account): JsonResponse
     {
-        //
+        try {
+            $account->delete();
+            return response()->json([
+                'status' => 'success'
+            ]);
+        } catch (\Exception $e){
+            return response()->json([
+                'status' => 'fail',
+                'message' => 'Wystąpił błąd!'
+            ])->setStatusCode(500);
+        }
     }
 }

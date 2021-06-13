@@ -111,5 +111,6 @@
                 @endforeach
                 </tbody>
             </table>
+            {{ $kids->links() }}
         </div>
     </x-app-layout>

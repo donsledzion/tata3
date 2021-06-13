@@ -22,11 +22,27 @@ Route::get('/', function () {
 
 Route::get('/dashboard', function () {return view('dashboard');})->middleware(['auth'])->name('dashboard');
 
-Route::get('/users/list', [UserController::class, 'index'])->middleware('auth');
+//****************************************************************************************************************************
+// User routes
+//****************************************************************************************************************************
+Route::get('/users/list',       [UserController::class, 'index'])->name('users.index')->middleware('auth');
+Route::delete('/users/{user}',  [UserController::class, 'destroy'])->middleware('auth');
 
-Route::get('/kids', [KidController::class, 'index'])->name('kids.index')->middleware('auth');
+//****************************************************************************************************************************
+// Kid routes
+//****************************************************************************************************************************
+Route::get('/kids',             [KidController::class, 'index'])->name('kids.index')->middleware('auth');
+Route::get('/kids/create',      [KidController::class, 'create'])->name('kids.create')->middleware('auth');
 
-Route::get('/accounts/list',    [AccountController::class, 'index'])->name('accounts.index')->middleware('auth');
-Route::get('/accounts/create',  [AccountController::class, 'create'])->name('accounts.create')->middleware('auth');
+//****************************************************************************************************************************
+// Account routes
+//****************************************************************************************************************************
+Route::get('/accounts',                 [AccountController::class, 'index'])->name('accounts.index')->middleware('auth');
+Route::get('/accounts/{account}',       [AccountController::class, 'show'])->name('accounts.show')->middleware('auth');
+Route::get('/accounts/create',          [AccountController::class, 'create'])->name('accounts.create')->middleware('auth');
+Route::post('/accounts',                [AccountController::class, 'store'])->name('accounts.store')->middleware('auth');
+Route::get('/accounts/edit/{account}',  [AccountController::class, 'edit'])->name('accounts.edit')->middleware('auth');
+Route::post('/accounts/{account}',      [AccountController::class, 'update'])->name('accounts.update')->middleware('auth');
+Route::delete('/accounts/{account}',    [AccountController::class, 'destroy'])->name('accounts.destroy')->middleware('auth');
 
 require __DIR__.'/auth.php';

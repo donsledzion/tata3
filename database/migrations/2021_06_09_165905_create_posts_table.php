@@ -23,7 +23,7 @@ class CreatePostsTable extends Migration
             $table->unsignedBigInteger('kid_id');
             $table->foreign('kid_id')->references('id')->on('kids');
 
-            $table->string('sentence');
+            $table->longText('sentence');
             $table->string('picture');
 
             $table->unsignedBigInteger('status_id');

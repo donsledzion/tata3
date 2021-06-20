@@ -8,11 +8,13 @@
                     </h1>
                 </div>
                 <div class="float-right">
+                    @if (Illuminate\Support\Facades\Gate::forUser(Illuminate\Support\Facades\Auth::user())->allows('create-account'))
                     <a class="float-right" href="{{route('accounts.create')}}">
                         <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
                             Dodaj konto
                         </button>
                     </a>
+                    @endif
                 </div>
             </div>
         </x-slot>

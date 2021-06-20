@@ -1,5 +1,7 @@
 <?php
 
+use App\Http\Controllers\AccountUserPermissionController;
+use App\Http\Controllers\PostController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\AccountController;
@@ -23,6 +25,12 @@ Route::get('/', function () {
 Route::get('/dashboard', function () {return view('dashboard');})->middleware(['auth'])->name('dashboard');
 
 //****************************************************************************************************************************
+// Post routes
+//****************************************************************************************************************************
+Route::get('/posts',       [PostController::class, 'index'])->name('posts.index')->middleware('auth');
+
+
+//****************************************************************************************************************************
 // User routes
 //****************************************************************************************************************************
 Route::get('/users/list',       [UserController::class, 'index'])->name('users.index')->middleware('auth');
@@ -38,11 +46,18 @@ Route::get('/kids/create',      [KidController::class, 'create'])->name('kids.cr
 // Account routes
 //****************************************************************************************************************************
 Route::get('/accounts',                 [AccountController::class, 'index'])->name('accounts.index')->middleware('auth');
+Route::get('/account/create',          [AccountController::class, 'create'])->name('accounts.create')->middleware('auth');
 Route::get('/accounts/{account}',       [AccountController::class, 'show'])->name('accounts.show')->middleware('auth');
-Route::get('/accounts/create',          [AccountController::class, 'create'])->name('accounts.create')->middleware('auth');
 Route::post('/accounts',                [AccountController::class, 'store'])->name('accounts.store')->middleware('auth');
 Route::get('/accounts/edit/{account}',  [AccountController::class, 'edit'])->name('accounts.edit')->middleware('auth');
 Route::post('/accounts/{account}',      [AccountController::class, 'update'])->name('accounts.update')->middleware('auth');
 Route::delete('/accounts/{account}',    [AccountController::class, 'destroy'])->name('accounts.destroy')->middleware('auth');
+
+//****************************************************************************************************************************
+// AccountUserPermission routes
+//****************************************************************************************************************************
+Route::get('/accountuserpermission',[AccountUserPermissionController::class, 'store'])
+    ->name('accountuserpermission.store')
+    ->middleware('auth');
 
 require __DIR__.'/auth.php';

@@ -52,6 +52,8 @@
                         <!-- Authentication -->
                         <x-dropdown-link href="{{ route('users.index') }}">{{ __('Użytkownicy') }}</x-dropdown-link>
 
+                        <x-dropdown-link href="{{ route('posts.index') }}">{{ __('Posty') }}</x-dropdown-link>
+
                         <x-dropdown-link href="{{ route('accounts.index') }}">{{ __('Konta') }}</x-dropdown-link>
 
                         <x-dropdown-link href="{{ route('kids.index') }}">{{ __('Bombelki') }}</x-dropdown-link>

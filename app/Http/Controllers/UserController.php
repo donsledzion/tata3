@@ -19,11 +19,7 @@ class UserController extends Controller
      * @return View
      */
     public function index()
-    {/*
-        return view('users.index',[
-            'users' => User::all()
-        ]);
-    */
+    {
         $result =
             User::join('user_status', 'user_status.id', '=', 'users.status_id')
                 ->select(['users.id', 'users.email', 'users.name', 'users.email_verified_at',

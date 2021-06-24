@@ -12,12 +12,18 @@
 
                 <!-- Navigation Links -->
                 <div class="hidden space-x-8 sm:-my-px sm:ml-10 sm:flex">
-                    <x-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')">
-                        {{ __('Konto') }}
+                    @if(Illuminate\Support\Facades\Auth::user()->isParentToAccount())
+                    <x-nav-link href="{{route('accounts.show',Illuminate\Support\Facades\Auth::user()->isParentToAccount())}}" :active="request()->routeIs('dashboard')">
+                        {{ __('Moja rodzinka') }}
                     </x-nav-link>
+                    @else
+                        <x-nav-link class="2xl:bg-red-100 font-bold 2xl:animate-pulse" href="{{route('accounts.create')}}" :active="request()->routeIs('dashboard')">
+                            {{ __('Załóż rodzinkę') }}
+                        </x-nav-link>
+                    @endif
                 </div>
                 <div class="hidden space-x-8 sm:-my-px sm:ml-2 sm:flex">
-                    <x-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')">
+                    <x-nav-link :href="route('posts.index')" :active="request()->routeIs('dashboard')">
                         {{ __('Cytaty') }}
                     </x-nav-link>
                 </div>
@@ -38,7 +44,7 @@
                 <x-dropdown align="right" width="48">
                     <x-slot name="trigger">
                         <button class="flex items-center text-sm font-medium text-gray-500 hover:text-gray-700 hover:border-gray-300 focus:outline-none focus:text-gray-700 focus:border-gray-300 transition duration-150 ease-in-out">
-                            <div>{{ Auth::user()->name }}</div>
+                            <div>{{ Illuminate\Support\Facades\Auth::user()->name }}</div>
 
                             <div class="ml-1">
                                 <svg class="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
@@ -50,13 +56,14 @@
 
                     <x-slot name="content">
                         <!-- Authentication -->
-                        <x-dropdown-link href="{{ route('users.index') }}">{{ __('Użytkownicy') }}</x-dropdown-link>
+                        <x-dropdown-link :href="route('users.index')">{{ __('Użytkownicy') }}</x-dropdown-link>
 
-                        <x-dropdown-link href="{{ route('posts.index') }}">{{ __('Posty') }}</x-dropdown-link>
+                        <x-dropdown-link :href="route('posts.index')">{{ __('Posty') }}</x-dropdown-link>
+                        @if(Illuminate\Support\Facades\Auth::user()->isAdmin())
+                            <x-dropdown-link :href="route('accounts.index')">{{ __('Konta') }}</x-dropdown-link>
+                        @endif
 
-                        <x-dropdown-link href="{{ route('accounts.index') }}">{{ __('Konta') }}</x-dropdown-link>
-
-                        <x-dropdown-link href="{{ route('kids.index') }}">{{ __('Bombelki') }}</x-dropdown-link>
+                        <x-dropdown-link :href="route('kids.index')">{{ __('Bombelki') }}</x-dropdown-link>
 
                         <form method="POST" action="{{ route('logout') }}">
                             @csrf
@@ -68,6 +75,7 @@
                                 {{ __('Log Out') }}
                             </x-dropdown-link>
                         </form>
+
                     </x-slot>
                 </x-dropdown>
             </div>
@@ -101,6 +109,15 @@
 
             <div class="mt-3 space-y-1">
                 <!-- Authentication -->
+                <x-dropdown-link :href="route('users.index')">{{ __('Użytkownicy') }}</x-dropdown-link>
+
+                <x-dropdown-link :href="route('posts.index')">{{ __('Posty') }}</x-dropdown-link>
+
+                @if(Illuminate\Support\Facades\Auth::user()->isAdmin())
+                    <x-dropdown-link :href="route('accounts.index')">{{ __('Konta') }}</x-dropdown-link>
+                @endif
+
+                <x-dropdown-link :href="route('kids.index')">{{ __('Bombelki') }}</x-dropdown-link>
                 <form method="POST" action="{{ route('logout') }}">
                     @csrf
 

@@ -1,35 +1,93 @@
-<x-guest-layout>
-    <x-auth-card>
-        <x-slot name="logo">
-            <a href="/">
-                <x-application-logo class="w-20 h-20 fill-current text-gray-500" />
-            </a>
-        </x-slot>
-        <x-slot name="title">
-            Edytuj konto
-        </x-slot>
-        <!-- Validation Errors -->
-        <x-auth-validation-errors class="mb-4" :errors="$errors" />
 
-            @csrf
+<x-app-layout>
+    <x-slot name="header">
+        <h2 class="font-semibold text-xl text-gray-800 leading-tight">
+            {{ "Konto" }}
+        </h2>
+    </x-slot>
 
-            <!-- Account name -->
-            <div>
-                <x-label for="name" :value="__('Nazwa rodzinki')" />
+    <!-- component -->
 
-                <x-input id="name" class="block mt-1 w-full" type="text" name="name" value="{{$account->name}}" required autofocus disabled />
+    <div class="mx-auto px-4 py-8 max-w-xl my-20">
+        <div class="bg-white shadow-2xl rounded-lg mb-6 tracking-wide" >
+            <div class="md:flex-shrink-0">
+                @if($account->avatar == null)
+                    <img src="{{ asset('storage/defaults/family_avatar.jpg') }}" alt="avatar" class="w-full h-auto rounded-lg rounded-b-none">
+                @else
+                <img src="{{ asset('storage/'.$account->id.'/768/' . $account->avatar) }}" alt="avatar" class="w-full h-auto rounded-lg rounded-b-none">
+                @endif
             </div>
+            <div class="px-4 py-2 mt-2">
+                <h2 class="font-bold text-2xl text-gray-800 tracking-normal">{{$account->name}}</h2>
+                <p class="text-sm text-gray-700 px-2 mr-1">
+                    @if($account->bio)
+                        {{$account->bio}}
+                    @else
+                    Tutaj w sumie przydałoby się krótkie, nieobligatoryjne bio o rodzince, ale zobaczymy jeszcze czy się coś takiego znajdzie :)
+                    @endif
+                </p>
+                <div class="flex items-center justify-between mt-2 mx-6">
+                </div>
+                <div class="flex p-4 border-t border-gray-300 text-gray-700">
+                    <div class="flex-1 inline-flex items-center">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z" />
+                        </svg>
+                        <p><span class="text-gray-900 font-bold">{{$account->kids->count()}}</span> Bombelki</p>
+                    </div>
+                    <div class="flex-1 inline-flex items-center">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+                        </svg>
+                        <p><span class="text-gray-900 font-bold">{{App\Models\Account::find($account->id)->users->count()}}</span> Obserwujących</p>
+                    </div>
 
-            <!-- Account avatar -->
-
-
-            <div>
-                <x-label for="kids" :value="__('Bombelki')" />
+                </div>
+                <h2 class="font-bold text-2xl text-gray-800 tracking-normal">Bombelki</h2>
+                <div class="content-center">
+                    @if (Illuminate\Support\Facades\Gate::forUser(Illuminate\Support\Facades\Auth::user())->allows('create-kid'))
+                        <a class="content-center" href="{{route('kids.create')}}">
+                            <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
+                                Dodaj Bombelka
+                            </button>
+                        </a>
+                    @endif
+                </div>
                 @foreach($account->kids as $kid)
-                    <x-input id="kid_{{$kid->id}}" class="block mt-1 w-full" type="text" name="dim_name" value="{{$kid->first_name}} &#34;{{$kid->dim_name}}&#34; {{$kid->last_name}} " required autofocus disabled />
+                    <div class="bg-white shadow-xl rounded-lg overflow-hidden">
+                        <div class="bg-cover bg-center h-96 p-4" style="background-image: url({{ asset('storage/'.$kid->account_id.'/768/' . $kid->default_pic) }})">
+                            <div class="flex justify-end">
+                                <svg class="h-6 w-6 text-white fill-current" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                                    <path d="M12.76 3.76a6 6 0 0 1 8.48 8.48l-8.53 8.54a1 1 0 0 1-1.42 0l-8.53-8.54a6 6 0 0 1 8.48-8.48l.76.75.76-.75zm7.07 7.07a4 4 0 1 0-5.66-5.66l-1.46 1.47a1 1 0 0 1-1.42 0L9.83 5.17a4 4 0 1 0-5.66 5.66L12 18.66l7.83-7.83z"></path>
+                                </svg>
+                            </div>
+                        </div>
+                        <div class="p-4">
+                            <p class="uppercase tracking-wide text-sm font-bold text-gray-700">{{$kid->first_name}}  {{$kid->last_name}}</p>
+                            <p class="text-3xl text-gray-900">{{$kid->dim_name}}</p>
+                            <p class="text-gray-700">Narodziny: {{$kid->birth_date}}</p>
+                        </div>
+                        <div class="flex p-4 border-t border-gray-300 text-gray-700">
+                            <div class="flex-1 inline-flex items-center">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                                    <path fill-rule="evenodd" d="M18 13V5a2 2 0 00-2-2H4a2 2 0 00-2 2v8a2 2 0 002 2h3l3 3 3-3h3a2 2 0 002-2zM5 7a1 1 0 011-1h8a1 1 0 110 2H6a1 1 0 01-1-1zm1 3a1 1 0 100 2h3a1 1 0 100-2H6z" clip-rule="evenodd" />
+                                </svg>
+                                <p><span class="text-gray-900 font-bold">{{$kid->posts->count()}}</span> Posty</p>
+                            </div>
+                            <div class="flex-1 inline-flex items-center">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+                                </svg>
+                                <p><span class="text-gray-900 font-bold">{{App\Models\Account::find($kid->account_id)->users->count()}}</span> Obserwujących</p>
+                            </div>
+                        </div>
+                    </div>
                 @endforeach
 
             </div>
 
-    </x-auth-card>
-</x-guest-layout>
+        </div>
+    </div>
+</x-app-layout>

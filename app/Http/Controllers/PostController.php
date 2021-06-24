@@ -3,11 +3,18 @@
 namespace App\Http\Controllers;
 
 use App\Models\Post;
+use App\Services\PostService;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
 
 class PostController extends Controller
 {
+    protected PostService $postService;
+
+    public function __construct(PostService $postService) {
+        $this->postService = $postService;
+    }
+
     /**
      * Display a listing of the resource.
      *
@@ -15,17 +22,14 @@ class PostController extends Controller
      */
     public function index()
     {
-        $posts = Post::join('kids','kids.id','=','posts.kid_id')
-            ->join('accounts','accounts.id','=','kids.account_id')
-            ->select('posts.*','kids.first_name as kid_first_name',
-                'kids.last_name as kid_last_name',
-                'kids.dim_name as kid_dim_name',
-                'kids.default_pic as kid_default_picture',
-                'kids.account_id as kid_account_id')
-            ->orderby('posts.said_at','desc')
-            ->get()
-        ;
+        $posts = $this->postService->index();
         return view("posts.index",['posts' => $posts]);
+
+    }
+
+    public function feedPosts(Request $request)
+    {
+        return $this->postService->feedPost($request);
     }
 
     /**

@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\AccountUserPermissionController;
 use App\Http\Controllers\PostController;
+use App\Http\Controllers\UploadImageController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\AccountController;
@@ -17,17 +18,21 @@ use App\Http\Controllers\KidController;
 | contains the "web" middleware group. Now create something great!
 |
 */
+//****************************************************************************************************************************
+// Images routes
+//****************************************************************************************************************************
+Route::post('/image/account',       [UploadImageController::class, 'save'])->name('account.avatar')->middleware('auth');
 
-Route::get('/', function () {
-    return view('welcome');
-});
+
+Route::get('/',       [PostController::class, 'feedPosts'])->name('welcome')->middleware('auth');
 
 Route::get('/dashboard', function () {return view('dashboard');})->middleware(['auth'])->name('dashboard');
 
 //****************************************************************************************************************************
 // Post routes
 //****************************************************************************************************************************
-Route::get('/posts',       [PostController::class, 'index'])->name('posts.index')->middleware('auth');
+Route::get('/posts',            [PostController::class, 'index'])->name('posts.index')->middleware('auth');
+Route::get('/postsfeed',        [PostController::class, 'feedPosts'])->name('postsfeed.index')->middleware('auth');
 
 
 //****************************************************************************************************************************
@@ -40,7 +45,7 @@ Route::delete('/users/{user}',  [UserController::class, 'destroy'])->middleware(
 // Kid routes
 //****************************************************************************************************************************
 Route::get('/kids',             [KidController::class, 'index'])->name('kids.index')->middleware('auth');
-Route::get('/kids/create',      [KidController::class, 'create'])->name('kids.create')->middleware('auth');
+Route::get('/kid/create',      [KidController::class, 'create'])->name('kids.create')->middleware('auth');
 
 //****************************************************************************************************************************
 // Account routes

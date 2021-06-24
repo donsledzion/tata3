@@ -26,10 +26,15 @@ class AuthServiceProvider extends ServiceProvider
     public function boot()
     {
         $this->registerPolicies();
-        error_log("Walidacja uprawnień!");
+
         Gate::define('create-account', function (){
-            error_log("IS PARENT?! :". Auth::user()->isParent());
+            error_log("Walidacja uprawnień: tworzenie konta");
             return !(Auth::user()->isParent());
-    });
+        });
+
+        Gate::define('create-kid', function (){
+            error_log("Walidacja uprawnień: dodawanie dziecka");
+            return Auth::user()->isParent();
+        });
     }
 }

@@ -3,17 +3,13 @@
 
 namespace App\Services;
 
-use App\Http\Controllers\AccountUserPermissionController;
 use App\Http\Requests\AccountRequest;
-use App\Models\AccountUserPermission;
 use App\Repositories\AccountRepository;
-use App\Repositories\AccountUserPermissionRepository;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Gate;
-use function PHPUnit\Framework\throwException;
 
 class AccountService
 {
@@ -30,11 +26,12 @@ class AccountService
         if(! Gate::forUser(Auth::user())->allows('create-account', $this->account)){
             abort(403);
         }
-        $attributes = $request->all();
         DB::beginTransaction();
         try{
 
-            $newAccount = $this->account->store($attributes);
+
+
+            $newAccount = $this->account->store($request);
 
             $permissionRequest = [
                 'account_id'=>$newAccount->id,

@@ -19,7 +19,6 @@ class AccountUserPermissionService
 
     public function store(array $request){
         $attributes = $request;
-        error_log("jestem w AUP-service (store)!!!============!!!!!!!!!!!!!!!!!!!!!!!!");
 
         return $this->accountuserpermission->store($attributes);
     }

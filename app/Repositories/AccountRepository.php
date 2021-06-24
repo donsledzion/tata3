@@ -3,8 +3,12 @@
 
 namespace App\Repositories;
 
+use App\Http\Controllers\UploadImageController;
 use App\Models\Account;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\File;
+use Illuminate\Support\Facades\Storage;
+use Intervention\Image\Facades\Image;
 
 class AccountRepository
 {
@@ -24,15 +28,33 @@ class AccountRepository
         return $this->account->paginate(5);
     }
 
-    public function store($attributes){
+    public function store($request){
 
-        $creation = new Account($attributes);
-        $creation->save() ;
-        error_log("=====================================================");
-        error_log("creation_id: ". $creation->id);
-        error_log("current_id: ". Auth::id());
-        error_log("creation: ".$creation);
-        error_log("=====================================================");
+
+
+        $attributes = $request->all();
+        try {
+            $creation = Account::create($attributes);
+            if (!empty($request->file('avatar'))) {
+                try {
+                    $uploadedImage = (new UploadImageController)->save($request);
+                    $creation->avatar = $uploadedImage->name;
+                } catch (\Exception $e) {
+                    error_log("Błąd wysyłania plików na serwer:");
+                    error_log("Error message: " . $e->getMessage());
+                }
+            } else {
+                error_log("Nie ma fotki!");
+            }
+
+            $creation->save();
+        } catch(\Exception $e){
+            error_log("Błąd zapisu konta:");
+            error_log("Error message: " . $e->getMessage());
+        }
+
+        (new UploadImageController)->organizePictures($uploadedImage->id,$creation->id);
+
         return $creation;
     }
 
@@ -43,5 +65,4 @@ class AccountRepository
     public function delete($id) {
         return $this->account->find($id)->delete();
     }
-
 }

@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Facades\Auth;
+use phpDocumentor\Reflection\Types\Integer;
 
 class User extends Authenticatable
 {
@@ -49,15 +50,41 @@ class User extends Authenticatable
      *
      */
 
-    public function isParent(): bool
+    public function isParent(): bool // need to move method to services
     {
         $match = User::join('account_user_permission', 'account_user_permission.user_id','=','users.id')
             ->join('accounts', 'accounts.id','=','account_user_permission.account_id')
             ->join('permissions','permissions.id','=','account_user_permission.permission_id')
             ->where('permissions.name','=','permissions.parents')
-            ->where('users.id','=',Auth::id())
+            ->where('users.id','=',$this->id)
             ->count();
-        error_log("Count matches = ".$match);
+        if($match>0) {
+            return true;
+        }
+        return false;
+    }
+
+    public function isParentToAccount()
+    {
+        $account = User::join('account_user_permission','account_user_permission.user_id','=','users.id')
+            ->join('permissions','permissions.id','=','account_user_permission.permission_id')
+            ->join('accounts','accounts.id','=','account_user_permission.account_id')
+            ->where('users.id','=',$this->id)
+            ->where('permissions.name','permissions.parents')
+            ->select('accounts.*')
+            ->first();
+
+        if($account) {
+            return $account['id'];
+        }
+        else return null;
+    }
+
+    public function isAdmin(): bool // need to move method to services
+    {
+        $match = User::join('admins','admins.user_id','=','users.id')
+            ->where('users.id','=',$this->id)
+            ->count();
         if($match>0) {
             return true;
         }

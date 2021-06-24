@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Kid extends Model
 {
@@ -25,4 +26,10 @@ class Kid extends Model
         'gender',
         'default_pic',
     ];
+
+    public function posts():hasMany
+    {
+        return $this->hasMany(Post::class);
+    }
+
 }

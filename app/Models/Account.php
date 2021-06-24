@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Account extends Model
 {
@@ -17,6 +18,7 @@ class Account extends Model
  */
 protected $fillable = [
     'name',
+    'bio',
     'avatar',
 ];
 
@@ -38,12 +40,12 @@ protected $casts = [
          *
          * @return BelongsToMany
          */
-    public function users()
+    public function users():belongsToMany
     {
         return $this->belongsToMany(User::class, 'account_user_permission');
     }
 
-    public function kids()
+    public function kids():hasMany
     {
         return $this->hasMany(Kid::class);
     }

@@ -10,6 +10,7 @@ use Illuminate\Contracts\View\View;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Exception;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Gate;
 
@@ -50,7 +51,10 @@ class AccountController extends Controller
      */
     public function store(AccountRequest $request): RedirectResponse
     {
+        error_log("jestem w kontrolerze AccountController");
+
         $this->accountservice->store($request);
+
         return redirect(route('accounts.index'));
     }
 

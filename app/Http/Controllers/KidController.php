@@ -3,11 +3,19 @@
 namespace App\Http\Controllers;
 
 use App\Models\Kid;
+use App\Services\KidService;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\View\View;
 
 class KidController extends Controller
 {
+
+    protected KidService $kidService;
+
+    public function __construct(KidService $kidService){
+        $this->kidService = $kidService;
+    }
     /**
      * Display a listing of the resource.
      *
@@ -15,11 +23,8 @@ class KidController extends Controller
      */
     public function index(): View
     {
-        return view("kids.index", [
-        'kids' => Kid::join('accounts','accounts.id','=','kids.account_id')
-            ->select(['kids.*','accounts.name as account_name'])
-            ->paginate(5)
-        ]);
+        $kids = $this->kidService->index();
+        return view('kids.related',['kids' => $kids]);
     }
 
     /**

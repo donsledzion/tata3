@@ -29,8 +29,6 @@ class AccountUserPermissionController extends Controller
             $this->accountuserpermissionservice->store($request);
         } catch(\Exception $e){
 
-            error_log("Wyjebka w kontrolerze:". $e->getMessage());
-
             return response()->json([
                 'status' => 'fail',
                 'message'=> 'nie udało się nadać uprawnień',

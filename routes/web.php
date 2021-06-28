@@ -24,15 +24,18 @@ use App\Http\Controllers\KidController;
 Route::post('/image/account',       [UploadImageController::class, 'save'])->name('account.avatar')->middleware('auth');
 
 
-Route::get('/',       [PostController::class, 'feedPosts'])->name('welcome')->middleware('auth');
 
-Route::get('/dashboard', function () {return view('dashboard');})->middleware(['auth'])->name('dashboard');
+Route::get('/',                     [PostController::class, 'feedPosts'])->name('welcome')->middleware('auth');
+
+Route::get('/dashboard', function() {return view('dashboard');})->middleware(['auth'])->name('dashboard');
 
 //****************************************************************************************************************************
 // Post routes
 //****************************************************************************************************************************
-Route::get('/posts',            [PostController::class, 'index'])->name('posts.index')->middleware('auth');
-Route::get('/postsfeed',        [PostController::class, 'feedPosts'])->name('postsfeed.index')->middleware('auth');
+Route::get('/posts',        [PostController::class, 'index'])->name('posts.index')->middleware('auth');
+Route::get('/postsfeed',    [PostController::class, 'feedPosts'])->name('postsfeed.index')->middleware('auth');
+Route::get('/post/create',  [PostController::class, 'create'])->name('posts.create')->middleware('auth');
+Route::post('/posts',       [PostController::class, 'store'])->name('posts.store')->middleware('auth');
 
 
 //****************************************************************************************************************************
@@ -41,11 +44,13 @@ Route::get('/postsfeed',        [PostController::class, 'feedPosts'])->name('pos
 Route::get('/users/list',       [UserController::class, 'index'])->name('users.index')->middleware('auth');
 Route::delete('/users/{user}',  [UserController::class, 'destroy'])->middleware('auth');
 
+
 //****************************************************************************************************************************
 // Kid routes
 //****************************************************************************************************************************
 Route::get('/kids',             [KidController::class, 'index'])->name('kids.index')->middleware('auth');
-Route::get('/kid/create',      [KidController::class, 'create'])->name('kids.create')->middleware('auth');
+Route::get('/kid/create',       [KidController::class, 'create'])->name('kids.create')->middleware('auth');
+Route::post('/kids',            [KidController::class, 'store'])->name('kids.store')->middleware('auth');
 
 //****************************************************************************************************************************
 // Account routes

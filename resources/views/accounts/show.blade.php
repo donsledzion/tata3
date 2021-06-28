@@ -2,7 +2,7 @@
 <x-app-layout>
     <x-slot name="header">
         <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-            {{ "Konto" }}
+            {{ "Moja rodzinka" }}
         </h2>
     </x-slot>
 
@@ -45,18 +45,20 @@
 
                 </div>
                 <h2 class="font-bold text-2xl text-gray-800 tracking-normal">Bombelki</h2>
-                <div class="content-center">
-                    @if (Illuminate\Support\Facades\Gate::forUser(Illuminate\Support\Facades\Auth::user())->allows('create-kid'))
-                        <a class="content-center" href="{{route('kids.create')}}">
-                            <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
+                <div class="content-center items-center">
+                    @if ((Illuminate\Support\Facades\Auth::user())->isParentToAccount()==$account->id)
+                        <a class="content-center items-center" href="{{route('kids.create')}}">
+                            <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded items-center">
                                 Dodaj Bombelka
                             </button>
                         </a>
                     @endif
+                        <div class="content-center h-4" ></div>
                 </div>
+
                 @foreach($account->kids as $kid)
                     <div class="bg-white shadow-xl rounded-lg overflow-hidden">
-                        <div class="bg-cover bg-center h-96 p-4" style="background-image: url({{ asset('storage/'.$kid->account_id.'/768/' . $kid->default_pic) }})">
+                        <div class="bg-cover bg-center h-96 p-4" style="background-image: url({{ asset('storage/'.$kid->account_id.'/768/' . $kid->avatar) }})">
                             <div class="flex justify-end">
                                 <svg class="h-6 w-6 text-white fill-current" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
                                     <path d="M12.76 3.76a6 6 0 0 1 8.48 8.48l-8.53 8.54a1 1 0 0 1-1.42 0l-8.53-8.54a6 6 0 0 1 8.48-8.48l.76.75.76-.75zm7.07 7.07a4 4 0 1 0-5.66-5.66l-1.46 1.47a1 1 0 0 1-1.42 0L9.83 5.17a4 4 0 1 0-5.66 5.66L12 18.66l7.83-7.83z"></path>

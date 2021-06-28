@@ -24,7 +24,7 @@ class Kid extends Model
         'birth_date',
         'about',
         'gender',
-        'default_pic',
+        'avatar',
     ];
 
     public function posts():hasMany

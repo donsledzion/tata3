@@ -57,4 +57,12 @@ class PostService
         }
         return view("posts.index");
     }
+
+    public function store(Request $request)
+    {
+        $newPost = $this->post->store($request);
+
+        return $newPost;
+    }
+
 }

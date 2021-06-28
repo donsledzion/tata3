@@ -2,7 +2,11 @@
 
 
 namespace App\Repositories;
+use App\Http\Controllers\UploadImageController;
 use App\Models\Kid;
+use App\Models\Photo;
+use App\Services\UploadImageService;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 
@@ -43,9 +47,32 @@ class KidRepository
         return $kids;
     }
 
-    public function store($attributes){
-        $newKid = new Kid($attributes);
-        $newKid->save();
+    public function store($request){
+
+        $attributes = $request->all();
+        $attributes['account_id'] = Auth::user()->isParentToAccount();
+        try {
+            $newKid = Kid::create($attributes);
+            if(!empty($request->file('avatar'))){
+                try{
+                    $uploadedImage = (new UploadImageController(new UploadImageService(new Photo())))->save($request);
+                    $newKid->avatar = $uploadedImage->name;
+                } catch(\Exception $e){
+                    error_log("Błąd wysyłania plików na serwer:");
+                    error_log("Error message: " . $e->getMessage());
+                }
+            } else {
+                error_log("Nie ma fotki!");
+            }
+
+            $newKid->save();
+        } catch(\Exception $e){
+            error_log("Błąd zapisu konta:");
+            error_log("Error message: " . $e->getMessage());
+        }
+
+        (new UploadImageController(new UploadImageService(new Photo())))->organizePictures($uploadedImage->id, $newKid->avatar, Auth::user()->isParentToAccount());
+
         return $newKid;
     }
 

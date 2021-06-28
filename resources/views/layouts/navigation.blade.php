@@ -56,9 +56,22 @@
 
                     <x-slot name="content">
                         <!-- Authentication -->
+                        @if(Illuminate\Support\Facades\Auth::user()->isParentToAccount())
+                            <x-dropdown-link href="{{route('accounts.show',Illuminate\Support\Facades\Auth::user()->isParentToAccount())}}" :active="request()->routeIs('dashboard')">
+                                {{ __('Moja rodzinka') }}
+                            </x-dropdown-link>
+                        @else
+                            <x-dropdown-link class="2xl:bg-red-100 font-bold 2xl:animate-pulse" href="{{route('accounts.create')}}" :active="request()->routeIs('dashboard')">
+                                {{ __('Załóż rodzinkę') }}
+                            </x-dropdown-link>
+                        @endif
+
+                        @if(Illuminate\Support\Facades\Auth::user()->isAdmin())
                         <x-dropdown-link :href="route('users.index')">{{ __('Użytkownicy') }}</x-dropdown-link>
+                        @endif
 
                         <x-dropdown-link :href="route('posts.index')">{{ __('Posty') }}</x-dropdown-link>
+
                         @if(Illuminate\Support\Facades\Auth::user()->isAdmin())
                             <x-dropdown-link :href="route('accounts.index')">{{ __('Konta') }}</x-dropdown-link>
                         @endif
@@ -109,7 +122,19 @@
 
             <div class="mt-3 space-y-1">
                 <!-- Authentication -->
+                @if(Illuminate\Support\Facades\Auth::user()->isParentToAccount())
+                <x-dropdown-link  href="{{route('accounts.show',Illuminate\Support\Facades\Auth::user()->isParentToAccount())}}" :active="request()->routeIs('dashboard')">
+                        {{ __('Moja rodzinka') }}
+                </x-dropdown-link>
+                @else
+                <x-dropdown-link  class="2xl:bg-red-100 font-bold 2xl:animate-pulse" href="{{route('accounts.create')}}" :active="request()->routeIs('dashboard')">
+                        {{ __('Załóż rodzinkę') }}
+                </x-dropdown-link>
+                @endif
+
+                @if(Illuminate\Support\Facades\Auth::user()->isAdmin())
                 <x-dropdown-link :href="route('users.index')">{{ __('Użytkownicy') }}</x-dropdown-link>
+                @endif
 
                 <x-dropdown-link :href="route('posts.index')">{{ __('Posty') }}</x-dropdown-link>
 
@@ -118,6 +143,7 @@
                 @endif
 
                 <x-dropdown-link :href="route('kids.index')">{{ __('Bombelki') }}</x-dropdown-link>
+
                 <form method="POST" action="{{ route('logout') }}">
                     @csrf
 

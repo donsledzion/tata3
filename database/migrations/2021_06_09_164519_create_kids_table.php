@@ -20,14 +20,14 @@ class CreateKidsTable extends Migration
             $table->foreign('account_id')->references('id')->on('accounts');
 
             $table->string('first_name');
-            $table->string('last_name');
+            $table->string('last_name')->nullable();
             $table->string('dim_name');
             $table->date('birth_date');
-            $table->longText('about');
+            $table->longText('about')->nullable();
 
             $table->unsignedBigInteger('gender');
             $table->foreign('gender')->references('id')->on('genders');
-            $table->string('default_pic');
+            $table->string('default_pic')->nullable();
 
             $table->timestamps();
         });

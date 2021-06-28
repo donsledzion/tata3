@@ -5,6 +5,7 @@ namespace App\Services;
 
 
 use App\Repositories\KidRepository;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
 class KidService
@@ -19,5 +20,16 @@ class KidService
         } else {
             return $this->kid->related();
         }
+    }
+
+    public function show($id){
+        return $this->kid->find($id);
+    }
+
+    public function store(Request $request){
+
+        $newKid = $this->kid->store($request);
+
+        return $newKid;
     }
 }

@@ -28,9 +28,6 @@ class AccountService
         }
         DB::beginTransaction();
         try{
-
-
-
             $newAccount = $this->account->store($request);
 
             $permissionRequest = [

@@ -2,9 +2,13 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Account;
 use App\Models\Post;
+use App\Models\PostStatus;
 use App\Services\PostService;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\View\View;
 
 class PostController extends Controller
@@ -35,22 +39,31 @@ class PostController extends Controller
     /**
      * Show the form for creating a new resource.
      *
-     * @return \Illuminate\Http\Response
+     * @return View
      */
     public function create()
     {
-        //
+        $kids = (Account::find(Auth::user()->isParentToAccount()))->kids;
+        $today = date("Y-m-d");
+        $statuses = PostStatus::all();
+
+        return view('posts.create',[
+            'kids' => $kids,
+            'said_at' => $today,
+            'statuses'=> $statuses
+        ]);
     }
 
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
+     * @param  Request  $request
+     * @return RedirectResponse
      */
     public function store(Request $request)
     {
-        //
+        $this->postService->store($request);
+        return redirect(route('postsfeed.index'));
     }
 
     /**

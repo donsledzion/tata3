@@ -5,6 +5,9 @@ namespace App\Repositories;
 
 use App\Http\Controllers\UploadImageController;
 use App\Models\Account;
+use App\Models\Photo;
+use App\Services\UploadImageService;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Storage;
@@ -30,14 +33,12 @@ class AccountRepository
 
     public function store($request){
 
-
-
         $attributes = $request->all();
         try {
             $creation = Account::create($attributes);
             if (!empty($request->file('avatar'))) {
                 try {
-                    $uploadedImage = (new UploadImageController)->save($request);
+                    $uploadedImage = (new UploadImageController(new UploadImageService(new Photo())))->save($request);
                     $creation->avatar = $uploadedImage->name;
                 } catch (\Exception $e) {
                     error_log("Błąd wysyłania plików na serwer:");
@@ -53,7 +54,7 @@ class AccountRepository
             error_log("Error message: " . $e->getMessage());
         }
 
-        (new UploadImageController)->organizePictures($uploadedImage->id,$creation->id);
+        (new UploadImageController(new UploadImageService(new Photo())))->organizePictures($uploadedImage->id,$creation->avatar, $creation->id);
 
         return $creation;
     }

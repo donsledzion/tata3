@@ -32,9 +32,5 @@ class AuthServiceProvider extends ServiceProvider
             return !(Auth::user()->isParent());
         });
 
-        Gate::define('create-kid', function (){
-            error_log("Walidacja uprawnień: dodawanie dziecka");
-            return Auth::user()->isParent();
-        });
     }
 }

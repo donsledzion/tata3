@@ -3,8 +3,14 @@
 
 namespace App\Repositories;
 
+use App\Http\Controllers\UploadImageController;
+use App\Models\Kid;
+use App\Models\Photo;
 use App\Models\Post;
 use App\Models\User;
+use App\Services\UploadImageService;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
 class PostRepository
@@ -26,7 +32,7 @@ class PostRepository
                 ->select('posts.*','kids.first_name as kid_first_name',
                     'kids.last_name as kid_last_name',
                     'kids.dim_name as kid_dim_name',
-                    'kids.default_pic as kid_default_picture',
+                    'kids.avatar as kid_default_picture',
                     'kids.account_id as kid_account_id')
                 ->orderby('posts.said_at','desc')
                 ->get();
@@ -42,7 +48,7 @@ class PostRepository
                 ->select('posts.*','kids.first_name as kid_first_name',
                     'kids.last_name as kid_last_name',
                     'kids.dim_name as kid_dim_name',
-                    'kids.default_pic as kid_default_picture',
+                    'kids.avatar as kid_default_picture',
                     'kids_post.account_id as kid_account_id')
                 ->orderby('posts.said_at','desc')
                 ->paginate(10);
@@ -55,6 +61,42 @@ class PostRepository
 
     public function delete($id) {
             return $this->post->find($id)->delete();
+    }
+
+    public function store(Request $request)
+    {
+        $attributes = $request->all();
+
+        $attributes['author_id'] = Auth::id();
+        $default_pic = Kid::find($request['kid_id'])->avatar;
+        $attributes['picture'] = $default_pic;
+        try {
+            $newPost = Post::create($attributes);
+            if(!empty($request->file('avatar'))){
+                try{
+                    $uploadedImage = (new UploadImageController(new UploadImageService(new Photo())))->save($request);
+
+                    $target_name = date("Ymd").date("His").".".$request->file('avatar')->extension();
+
+                    $newPost->picture = $target_name;
+
+                } catch(\Exception $e){
+                    error_log("Błąd wysyłania plików na serwer:");
+                    error_log("Error message: " . $e->getMessage());
+                }
+            } else {
+                error_log("Nie ma fotki!");
+            }
+
+            $newPost->save();
+        } catch(\Exception $e){
+            error_log("Błąd zapisu posta:");
+            error_log("Error message: " . $e->getMessage());
+        }
+
+        (new UploadImageController(new UploadImageService(new Photo())))->organizePictures($uploadedImage->id, $target_name, Auth::user()->isParentToAccount());
+
+        return $newPost;
     }
 
 }

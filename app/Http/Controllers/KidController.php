@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Kid;
 use App\Services\KidService;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\View\View;
@@ -30,22 +31,23 @@ class KidController extends Controller
     /**
      * Show the form for creating a new resource.
      *
-     * @return \Illuminate\Http\Response
+     * @return View
      */
     public function create()
     {
-        //
+        return view('kids.create');
     }
 
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
+     * @param  Request
+     * @return RedirectResponse
      */
     public function store(Request $request)
     {
-        //
+        $this->kidService->store($request);
+        return redirect(route('accounts.show',Auth::user()->isParentToAccount()));
     }
 
     /**

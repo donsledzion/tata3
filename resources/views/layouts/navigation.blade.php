@@ -5,8 +5,8 @@
             <div class="flex">
                 <!-- Logo -->
                 <div class="flex-shrink-0 flex items-center">
-                    <a href="{{ route('dashboard') }}">
-                        <x-application-logo class="block h-10 w-auto fill-current text-gray-600" />
+                    <a href="{{ route('welcome') }}">
+                        <img src="{{asset('storage/components/logo_tata.png')}}" class="block h-10 w-auto fill-current text-gray-600"/>
                     </a>
                 </div>
 
@@ -33,7 +33,7 @@
                     </x-nav-link>
                 </div>
                 <div class="hidden space-x-8 sm:-my-px sm:ml-2 sm:flex">
-                    <x-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')">
+                    <x-nav-link :href="route('users.index')" :active="request()->routeIs('dashboard')">
                         {{ __('Znajomi') }}
                     </x-nav-link>
                 </div>
@@ -70,7 +70,7 @@
                         <x-dropdown-link :href="route('users.index')">{{ __('Użytkownicy') }}</x-dropdown-link>
                         @endif
 
-                        <x-dropdown-link :href="route('posts.index')">{{ __('Posty') }}</x-dropdown-link>
+                        <x-dropdown-link :href="route('posts.index')">{{ __('Cytaty') }}</x-dropdown-link>
 
                         @if(Illuminate\Support\Facades\Auth::user()->isAdmin())
                             <x-dropdown-link :href="route('accounts.index')">{{ __('Konta') }}</x-dropdown-link>
@@ -85,7 +85,7 @@
                             <x-dropdown-link :href="route('logout')"
                                              onclick="event.preventDefault();
                                                 this.closest('form').submit();">
-                                {{ __('Log Out') }}
+                                {{ __('Wyloguj') }}
                             </x-dropdown-link>
                         </form>
 
@@ -108,7 +108,7 @@
     <!-- Responsive Navigation Menu -->
     <div :class="{'block': open, 'hidden': ! open}" class="hidden sm:hidden">
         <div class="pt-2 pb-3 space-y-1">
-            <x-responsive-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')">
+            <x-responsive-nav-link :href="route('welcome')" :active="request()->routeIs('welcome')">
                 {{ __('Dashboard') }}
             </x-responsive-nav-link>
         </div>
@@ -123,11 +123,11 @@
             <div class="mt-3 space-y-1">
                 <!-- Authentication -->
                 @if(Illuminate\Support\Facades\Auth::user()->isParentToAccount())
-                <x-dropdown-link  href="{{route('accounts.show',Illuminate\Support\Facades\Auth::user()->isParentToAccount())}}" :active="request()->routeIs('dashboard')">
+                <x-dropdown-link  href="{{route('accounts.show',Illuminate\Support\Facades\Auth::user()->isParentToAccount())}}" :active="request()->routeIs('accounts.show')">
                         {{ __('Moja rodzinka') }}
                 </x-dropdown-link>
                 @else
-                <x-dropdown-link  class="2xl:bg-red-100 font-bold 2xl:animate-pulse" href="{{route('accounts.create')}}" :active="request()->routeIs('dashboard')">
+                <x-dropdown-link  class="2xl:bg-red-100 font-bold 2xl:animate-pulse" href="{{route('accounts.create')}}" :active="request()->routeIs('accounts.create')">
                         {{ __('Załóż rodzinkę') }}
                 </x-dropdown-link>
                 @endif
@@ -136,7 +136,7 @@
                 <x-dropdown-link :href="route('users.index')">{{ __('Użytkownicy') }}</x-dropdown-link>
                 @endif
 
-                <x-dropdown-link :href="route('posts.index')">{{ __('Posty') }}</x-dropdown-link>
+                <x-dropdown-link :href="route('posts.index')">{{ __('Cytaty') }}</x-dropdown-link>
 
                 @if(Illuminate\Support\Facades\Auth::user()->isAdmin())
                     <x-dropdown-link :href="route('accounts.index')">{{ __('Konta') }}</x-dropdown-link>
@@ -150,7 +150,7 @@
                     <x-responsive-nav-link :href="route('logout')"
                             onclick="event.preventDefault();
                                         this.closest('form').submit();">
-                        {{ __('Log Out') }}
+                        {{ __('Wyloguj') }}
                     </x-responsive-nav-link>
                 </form>
             </div>

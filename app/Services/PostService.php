@@ -4,8 +4,10 @@
 namespace App\Services;
 
 
+use App\Models\User;
 use App\Repositories\PostRepository;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class PostService
 {
@@ -19,7 +21,7 @@ class PostService
     }
 
     public function feedPost(Request $request){
-        $posts = $this->post->all();
+        $posts = $this->post->related();
         $feed = '';
         if($request->ajax()) {
             foreach($posts as $post) {

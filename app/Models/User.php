@@ -3,7 +3,11 @@
 namespace App\Models;
 
 use Illuminate\Contracts\Auth\MustVerifyEmail;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasManyThrough;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Facades\Auth;
@@ -91,7 +95,24 @@ class User extends Authenticatable
         return false;
     }
 
-    public function accounts(){
-        return $this->belongsToMany(User::class, 'account_user_permission');
+    public function accounts():belongsToMany
+    {
+        return $this->belongsToMany(Account::class, 'account_user_permission')->withPivot('permission_id');
+    }
+
+    public function created_posts():hasMany
+    {
+        return $this->hasMany(Post::class, 'author_id');
+    }
+
+    public function kids()
+    {
+        $kids = collect();
+        foreach($this->accounts as $account){
+            foreach($account->kids as $kid) {
+                $kids->push($kid);
+            }
+        }
+        return $kids;
     }
 }

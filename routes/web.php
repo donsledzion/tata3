@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AccountUserPermissionController;
+use App\Http\Controllers\FriendController;
 use App\Http\Controllers\PostController;
 use App\Http\Controllers\UploadImageController;
 use Illuminate\Support\Facades\Route;
@@ -27,7 +28,6 @@ Route::post('/image/account',       [UploadImageController::class, 'save'])->nam
 
 Route::get('/',                     [PostController::class, 'feedPosts'])->name('welcome')->middleware('auth');
 
-Route::get('/dashboard', function() {return view('dashboard');})->middleware(['auth'])->name('dashboard');
 
 //****************************************************************************************************************************
 // Post routes
@@ -69,5 +69,10 @@ Route::delete('/accounts/{account}',    [AccountController::class, 'destroy'])->
 Route::get('/accountuserpermission',[AccountUserPermissionController::class, 'store'])
     ->name('accountuserpermission.store')
     ->middleware('auth');
+
+//****************************************************************************************************************************
+// Friends routes
+//****************************************************************************************************************************
+Route::get('/friends',                 [FriendController::class, 'index'])->name('friends.index')->middleware('auth');
 
 require __DIR__.'/auth.php';

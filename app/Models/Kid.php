@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Kid extends Model
@@ -30,6 +31,11 @@ class Kid extends Model
     public function posts():hasMany
     {
         return $this->hasMany(Post::class);
+    }
+
+    public function account():belongsTo
+    {
+        return $this->belongsTo(Account::class);
     }
 
 }

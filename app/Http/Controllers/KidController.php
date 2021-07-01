@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\StoreKidRequest;
 use App\Models\Kid;
 use App\Services\KidService;
 use Illuminate\Http\RedirectResponse;
@@ -41,10 +42,10 @@ class KidController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  Request
+     * @param  StoreKidRequest $request
      * @return RedirectResponse
      */
-    public function store(Request $request)
+    public function store(StoreKidRequest $request)
     {
         $this->kidService->store($request);
         return redirect(route('accounts.show',Auth::user()->isParentToAccount()));

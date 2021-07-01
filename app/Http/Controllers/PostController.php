@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\StorePostRequest;
 use App\Models\Account;
 use App\Models\Post;
 use App\Models\PostStatus;
@@ -57,10 +58,10 @@ class PostController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  Request  $request
+     * @param  StorePostRequest  $request
      * @return RedirectResponse
      */
-    public function store(Request $request)
+    public function store(StorePostRequest $request)
     {
         $this->postService->store($request);
         return redirect(route('postsfeed.index'));

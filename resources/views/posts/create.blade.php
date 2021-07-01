@@ -4,6 +4,10 @@
             {{ __('Dodaj cytat') }}
         </h2>
     </x-slot>
+
+    <!-- Validation Errors -->
+    <x-auth-validation-errors :errors="$errors" />
+
         <!-- component -->
         <script src="https://cdn.jsdelivr.net/gh/alpinejs/alpine@v2.x.x/dist/alpine.js" defer></script>
 
@@ -27,7 +31,7 @@
 
                             <form method="POST" action="{{ route('posts.store') }}" class="mt-8" enctype="multipart/form-data">
                                 <div class="mx-auto max-w-lg ">
-
+                                    <input name="author_id" id="author_id" hidden value="{{Illuminate\Support\Facades\Auth::id()}}" />
                                     <span class="px-1 text-sm text-gray-600">Cytowany Bombelek</span>
                                     <select name="kid_id" id="kid_id" class="text-md block px-3 py-2 rounded-lg w-full bg-white border-2 border-gray-300 placeholder-gray-600 shadow-md focus:placeholder-gray-500 focus:bg-white focus:border-gray-600 focus:outline-none">
                                         @foreach($kids as $kid)

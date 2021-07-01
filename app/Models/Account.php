@@ -11,29 +11,27 @@ class Account extends Model
 {
     use HasFactory;
 
-/**
- * The attributes that are mass assignable.
- *
- * @var array
- */
-protected $fillable = [
-    'name',
-    'bio',
-    'avatar',
-];
+    /**
+     * The attributes that are mass assignable.
+     *
+     * @var array
+     */
+    protected $fillable = [
+        'name',
+        'bio',
+        'avatar',
+    ];
 
 
-
-/**
- * The attributes that should be cast to native types.
- *
- * @var array
- */
-protected $casts = [
-    'created_at' => 'datetime',
-    'updated_at' => 'datetime'
-];
-
+    /**
+     * The attributes that should be cast to native types.
+     *
+     * @var array
+     */
+    protected $casts = [
+        'created_at' => 'datetime',
+        'updated_at' => 'datetime'
+    ];
 
         /**
          * Definition of many to many relationship between users and accounts
@@ -42,7 +40,7 @@ protected $casts = [
          */
     public function users():belongsToMany
     {
-        return $this->belongsToMany(User::class, 'account_user_permission');
+        return $this->belongsToMany(User::class, 'account_user_permission')->withPivot('permission_id');
     }
 
     public function kids():hasMany

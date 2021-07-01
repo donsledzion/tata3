@@ -3,7 +3,6 @@
 namespace App\Http\Controllers;
 
 use App\Models\User;
-use App\Services\UserService;
 use http\Env\Response;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
@@ -12,14 +11,8 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
-class UserController extends Controller
+class FriendController extends Controller
 {
-    protected UserService $userService;
-
-    public function __construct(UserService $userService){
-        $this->userService = $userService;
-    }
-
     /**
      * Display a listing of the resource.
      *
@@ -27,11 +20,7 @@ class UserController extends Controller
      */
     public function index()
     {
-        $result = $this->userService->index();
-
-        return view('users.index',[
-            'users' => $result
-        ]);
+        return view('friends.index');
     }
 
     /**
@@ -97,17 +86,6 @@ class UserController extends Controller
      */
     public function destroy(User $user): JsonResponse
     {
-        try {
-            $user->delete();
-            return response()->json([
-                'status' => 'success'
-            ]);
-        } catch (\Exception $e){
-            return response()->json([
-                'status' => 'fail',
-                'message' => 'Wystąpił błąd!'
-            ])->setStatusCode(500);
-        }
-
+     //
     }
 }

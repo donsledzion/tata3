@@ -4,6 +4,7 @@
 namespace App\Services;
 
 
+use App\Models\User;
 use App\Repositories\KidRepository;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -18,7 +19,7 @@ class KidService
         if(Auth::user()->isAdmin()) {
             return $this->kid->all();
         } else {
-            return $this->kid->related();
+            return $this->kid->related(User::find(Auth::id()));
         }
     }
 

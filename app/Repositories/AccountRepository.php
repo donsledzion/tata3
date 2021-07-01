@@ -33,7 +33,7 @@ class AccountRepository
 
     public function store($request){
 
-        $attributes = $request->all();
+        $attributes = $request->validated();
         try {
             $creation = Account::create($attributes);
             if (!empty($request->file('avatar'))) {

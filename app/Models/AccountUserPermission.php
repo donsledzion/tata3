@@ -28,5 +28,9 @@ class AccountUserPermission extends Model
         return $this->hasMany(Account::class);
     }
 
+    public function permissions(){
+        return $this->hasMany(Permission::class);
+    }
+
 
 }

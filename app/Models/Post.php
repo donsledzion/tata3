@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class Post extends Model
 {
@@ -28,5 +29,15 @@ class Post extends Model
         'created_at',
         'updated_at',
     ];
+
+    public function kid():belongsTo
+    {
+        return $this->belongsTo(Kid::class);
+    }
+
+    public function post_status():belongsTo
+    {
+        return $this->belongsTo(PostStatus::class);
+    }
 
 }

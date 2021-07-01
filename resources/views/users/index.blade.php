@@ -2,7 +2,7 @@
     <x-app-layout>
         <x-slot name="header">
             <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-                {{ __('Użytkownicy') }}
+                {{ __('Moi znajomi') }}
             </h2>
         </x-slot>
 
@@ -75,7 +75,6 @@
                 @endforeach
                 </tbody>
             </table>
-            {{ $users->links() }}
             @section('javascript')
                 const deleteUrl = "{{ url('users') }}/" ;
             @endsection

@@ -51,8 +51,6 @@ class AccountController extends Controller
      */
     public function store(AccountRequest $request): RedirectResponse
     {
-        error_log("jestem w kontrolerze AccountController");
-
         $account_id = $this->accountservice->store($request);
 
         return redirect(route('accounts.show',[$account_id]));

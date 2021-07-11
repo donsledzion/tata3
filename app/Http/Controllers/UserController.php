@@ -27,11 +27,7 @@ class UserController extends Controller
      */
     public function index()
     {
-        $result = $this->userService->index();
-
-        return view('users.index',[
-            'users' => $result
-        ]);
+        return $this->userService->index();
     }
 
     /**

@@ -14,27 +14,29 @@
                 <div class="hidden space-x-8 sm:-my-px sm:ml-10 sm:flex">
                     @if(Illuminate\Support\Facades\Auth::user()->isParentToAccount())
                     <x-nav-link href="{{route('accounts.show',Illuminate\Support\Facades\Auth::user()->isParentToAccount())}}" :active="request()->routeIs('dashboard')">
-                        {{ __('Moja rodzinka') }}
+                        {{ __('My family') }}
                     </x-nav-link>
                     @else
                         <x-nav-link class="2xl:bg-red-100 font-bold 2xl:animate-pulse" href="{{route('accounts.create')}}" :active="request()->routeIs('dashboard')">
-                            {{ __('Załóż rodzinkę') }}
+                            {{ __('Create family') }}
                         </x-nav-link>
                     @endif
                 </div>
                 <div class="hidden space-x-8 sm:-my-px sm:ml-2 sm:flex">
-                    <x-nav-link :href="route('posts.index')" :active="request()->routeIs('dashboard')">
-                        {{ __('Cytaty') }}
+                    <x-nav-link :href="route('postsfeed.index')" :active="request()->routeIs('dashboard')">
+                        {{ __('Quotes') }}
                     </x-nav-link>
                 </div>
+                @if(Illuminate\Support\Facades\Auth::user()->kids())
                 <div class="hidden space-x-8 sm:-my-px sm:ml-2 sm:flex">
                     <x-nav-link :href="route('kids.index')" :active="request()->routeIs('dashboard')">
-                        {{ __('Bombelki') }}
+                        {{ __('Kids') }}
                     </x-nav-link>
                 </div>
+                @endif
                 <div class="hidden space-x-8 sm:-my-px sm:ml-2 sm:flex">
                     <x-nav-link :href="route('users.index')" :active="request()->routeIs('dashboard')">
-                        {{ __('Znajomi') }}
+                        {{ __('Friends') }}
                     </x-nav-link>
                 </div>
             </div>
@@ -58,25 +60,25 @@
                         <!-- Authentication -->
                         @if(Illuminate\Support\Facades\Auth::user()->isParentToAccount())
                             <x-dropdown-link href="{{route('accounts.show',Illuminate\Support\Facades\Auth::user()->isParentToAccount())}}" :active="request()->routeIs('dashboard')">
-                                {{ __('Moja rodzinka') }}
+                                {{ __('My family') }}
                             </x-dropdown-link>
                         @else
                             <x-dropdown-link class="2xl:bg-red-100 font-bold 2xl:animate-pulse" href="{{route('accounts.create')}}" :active="request()->routeIs('dashboard')">
-                                {{ __('Załóż rodzinkę') }}
+                                {{ __('Create family') }}
                             </x-dropdown-link>
                         @endif
 
                         @if(Illuminate\Support\Facades\Auth::user()->isAdmin())
-                        <x-dropdown-link :href="route('users.index')">{{ __('Użytkownicy') }}</x-dropdown-link>
+                        <x-dropdown-link :href="route('users.index')">{{ __('Users') }}</x-dropdown-link>
                         @endif
 
-                        <x-dropdown-link :href="route('posts.index')">{{ __('Cytaty') }}</x-dropdown-link>
+                        <x-dropdown-link :href="route('postsfeed.index')">{{ __('Quotes') }}</x-dropdown-link>
 
                         @if(Illuminate\Support\Facades\Auth::user()->isAdmin())
-                            <x-dropdown-link :href="route('accounts.index')">{{ __('Konta') }}</x-dropdown-link>
+                            <x-dropdown-link :href="route('accounts.index')">{{ __('Accounts') }}</x-dropdown-link>
                         @endif
 
-                        <x-dropdown-link :href="route('kids.index')">{{ __('Bombelki') }}</x-dropdown-link>
+                        <x-dropdown-link :href="route('kids.index')">{{ __('Kids') }}</x-dropdown-link>
 
                         <form method="POST" action="{{ route('logout') }}">
                             @csrf
@@ -85,7 +87,7 @@
                             <x-dropdown-link :href="route('logout')"
                                              onclick="event.preventDefault();
                                                 this.closest('form').submit();">
-                                {{ __('Wyloguj') }}
+                                {{ __('Logout') }}
                             </x-dropdown-link>
                         </form>
 
@@ -136,7 +138,7 @@
                 <x-dropdown-link :href="route('users.index')">{{ __('Użytkownicy') }}</x-dropdown-link>
                 @endif
 
-                <x-dropdown-link :href="route('posts.index')">{{ __('Cytaty') }}</x-dropdown-link>
+                <x-dropdown-link :href="route('postsfeed.index')">{{ __('Cytaty') }}</x-dropdown-link>
 
                 @if(Illuminate\Support\Facades\Auth::user()->isAdmin())
                     <x-dropdown-link :href="route('accounts.index')">{{ __('Konta') }}</x-dropdown-link>

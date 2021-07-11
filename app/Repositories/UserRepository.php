@@ -28,7 +28,15 @@ class UserRepository
                 ->get();
         } else {
             // here should be query that returns all users that are in relation with logged user
-                return Account::find(Auth::user()->isParentToAccount())->users;
+                $account_of_user = Account::find(Auth::user()->isParentToAccount());
+                if($account_of_user){
+                    error_log("=======================================================");
+                    error_log("users = ".$account_of_user->users );
+                    error_log("=======================================================");
+                    return $account_of_user->users;
+                } else {
+                    return null;
+                }
         }
     }
 

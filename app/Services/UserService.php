@@ -14,6 +14,12 @@ class UserService
     }
 
     public function index(){
-        return $this->user->all();
+        $results =  $this->user->all();
+        if(!empty($results)) {
+            return view('users.related', [
+                'users' => $results
+            ]);
+        }
+        return redirect(route('welcome'));
     }
 }

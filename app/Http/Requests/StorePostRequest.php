@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests;
 
+use App\Models\Kid;
 use Illuminate\Foundation\Http\FormRequest;
 
 class StorePostRequest extends FormRequest
@@ -23,8 +24,12 @@ class StorePostRequest extends FormRequest
      */
     public function rules()
     {
+        $kid = Kid::find($this->kid_id);
+        $birth_date = $kid->birth_date;
+
+
         return [
-            'said_at' => 'date|required',
+            'said_at' => 'date|date_format:Y-m-d|after_or_equal:'.$birth_date.'|required',
             'author_id' => 'numeric|required',
             'kid_id' => 'numeric|required',
             'sentence' => 'min:3|max:2048|required',

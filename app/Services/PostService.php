@@ -4,6 +4,8 @@
 namespace App\Services;
 
 
+use App\Models\Account;
+use App\Models\Post;
 use App\Models\User;
 use App\Repositories\PostRepository;
 use Illuminate\Http\Request;
@@ -21,7 +23,9 @@ class PostService
     }
 
     public function feedPost(Request $request){
-        $posts = $this->post->related();
+
+        $posts = User::find(Auth::id())->posts();
+
         $feed = '';
         if($request->ajax()) {
             foreach($posts as $post) {
@@ -30,19 +34,28 @@ class PostService
                     <div class="md:flex">
                         <div class="w-full">
                             <div class="flex justify-between items-center p-3">
-                                <div class="flex flex-row items-center"> <img src="storage/'.$post->kid_account_id.'/160/'.$post->kid_default_picture.'" class="rounded-full" width="40">
-                                    <div class="flex flex-row items-center ml-2"> <span class="font-bold mr-1">'.$post->kid_dim_name.'</span> <small class="h-1 w-1 bg-gray-300 rounded-full mr-1 mt-1"></small> <a href="#" class="text-blue-600 text-sm hover:text-blue-800">Follow</a> </div>
+                                <div class="flex flex-row items-center"> <img src="storage/'.$post->kid->account_id.'/160/'.$post->kid->avatar.'" class="rounded-full" width="40">
+                                    <div class="flex flex-row items-center ml-2"> <span class="font-bold mr-1">'.$post->kid->dim_name.'</span> <small class="h-1 w-1 bg-gray-300 rounded-full mr-1 mt-1"></small> <a href="#" class="text-blue-600 text-sm hover:text-blue-800">'.__('Follow').'</a> </div>
                                 </div>
-                                <div class="pr-2"> <i class="fa fa-ellipsis-h text-gray-400 hover:cursor-pointer hover:text-gray-600"></i> </div>
+                                <div class="pr-2">';
+                if($post->kid->account_id == Auth::user()->isParentToAccount()) {
+                    $feed.='<a href="'.route('posts.edit',$post->id).'" class="bg-blue-500 p-2 edit text-white hover:shadow-lg text-xs font-thin" data-id="'.$post->id.'">'. __('Edit').'</a >
+                            <button class="bg-red-500 p-2 delete text-white hover:shadow-lg text-xs font-thin" data-class="posts" data-id="'.$post->id.'" >'.__('Delete').'</button >';
+                }
+                            $feed.='<i class="fa fa-ellipsis-h text-gray-400 hover:cursor-pointer hover:text-gray-600"></i>
+                                </div>
                             </div>
                             <div class="flex justify-between items-center p-3">
                                 <blockquote>
-                                <i>'.$post->sentence.'</i>
+                                <i>'.nl2br(e($post->sentence)).'</i>
                                 </blockquote>
                             </div>
-                            <div> <img src="storage/'.$post->kid_account_id.'/480/'.$post->picture.'"  class="w-full h-75"> </div>
-                            <div class="flex flex-row right-0 p-2">
-                                <b>'.$post->said_at.'</b>
+                            <div> <img src="storage/'.$post->kid->account_id.'/480/'.$post->picture.'"  class="w-full h-75"> </div>
+                            <div class="flex  right-0 p-2">
+                                <p><b>'.$post->said_at.'</b></p>
+                            </div>
+                            <div class="flex  right-0 p-2">
+                                <p><b>'.$post->kid->first_name.', '.$post->ageWhilePosting().'</b></p>
                             </div>
                             <div class="p-4 flex justify-between items-center">
                                 <div class="flex flex-row items-center"> <i class="fa fa-heart-o mr-2 fa-1x hover:text-gray-600"></i> <i class="fa fa-comment-o mr-2 fa-1x hover:text-gray-600"></i> <i class="fa fa-send-o mr-2 fa-1x hover:text-gray-600"></i> </div>
@@ -65,6 +78,21 @@ class PostService
         $newPost = $this->post->store($request);
 
         return $newPost;
+    }
+
+    public function delete($id)
+    {
+        return $this->post->delete($id);
+    }
+
+    public function edit(Post $post)
+    {
+        return $this->post->edit($post);
+    }
+
+    public function update(Request $request, Post $post)
+    {
+        return $this->post->update($request, $post);
     }
 
 }

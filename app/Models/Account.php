@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasManyThrough;
 
 class Account extends Model
 {
@@ -40,7 +41,7 @@ class Account extends Model
          */
     public function users():belongsToMany
     {
-        return $this->belongsToMany(User::class, 'account_user_permission')->withPivot('permission_id');
+        return $this->belongsToMany(User::class,'account_user_permission')->withPivot('account_id','user_id','permission_id');
     }
 
     public function kids():hasMany
@@ -48,4 +49,8 @@ class Account extends Model
         return $this->hasMany(Kid::class);
     }
 
+    public function posts():hasManyThrough
+    {
+        return $this->hasManyThrough(Post::class,Kid::class);
+    }
 }

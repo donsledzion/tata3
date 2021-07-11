@@ -4,12 +4,18 @@
 namespace App\Services;
 
 use App\Http\Requests\AccountRequest;
+use App\Models\Account;
+use App\Models\AccountUserPermission;
+use App\Models\Photo;
 use App\Repositories\AccountRepository;
 use Exception;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Gate;
+use Illuminate\Support\Facades\Storage;
+use League\Flysystem\File;
 
 class AccountService
 {
@@ -62,16 +68,66 @@ class AccountService
     }
 
     public function show($id){
-        return $this->account->find($id);
+
+        $account = $this->account->find($id);
+        if(!empty($account)){
+            return view("accounts.show", [
+                'account' => $account
+            ] );
+        } else {
+            return view("posts.index" );
+        }
     }
 
-    public function update(Request $request, $id){
-        $attributes = $request->all();
+    public function update(Request $request, Account $account){
 
-        return $this->account->update($id, $attributes);
+        return $this->account->update($request, $account);
     }
 
     public function delete($id){
-        return $this->account->delete($id);
+        try {
+            $account = $this->account->find($id);
+
+            foreach ($account->kids as $kid) {
+                $kid->deleteWithPicture();
+            }
+
+            $picture_to_delete = new Photo();
+
+            $picture_to_delete->unlinkPicture($account->id,$account->avatar);
+
+            $relations = AccountUserPermission::all();
+            error_log("============================================");
+            error_log("Relations:".$relations);
+            error_log("============================================");
+
+            foreach ($relations as $relation){
+
+                if($relation->account->id == $account->id){
+                    error_log("============================================");
+                    error_log("Deleting relations: ".$relation);
+                    error_log("============================================");
+                    $relation->delete();
+                }
+            }
+
+            $account_id = $account->id;
+
+            $account->delete($id);
+
+            Storage::deleteDirectory($account_id);
+
+            return response()->json([
+                'status' => 'success',
+                'message' => 'Pomyślnie usunięto konto Rodzinki!',
+            ])->setStatusCode(200);
+
+        } catch(\Exception $e){
+            return response()->json([
+                'status' => 'fail',
+                'message' => 'Wystąpił błąd kasowania Rodzinki!'.$e->getMessage(),
+                'error' => $e->getMessage()
+            ])->setStatusCode(500);
+        }
     }
 }

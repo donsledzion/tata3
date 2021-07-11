@@ -13,7 +13,7 @@ $(function(){
             if (result.isConfirmed) {
                 $.ajax({
                     method: "DELETE",
-                    url: deleteUrl + $(this).data("id")
+                    url: deleteUrl + $(this).data("class")+ "/" + $(this).data("id")
                 })
                     .done(function( response ) {
                         window.location.reload();

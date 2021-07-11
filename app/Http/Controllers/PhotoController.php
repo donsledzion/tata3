@@ -3,24 +3,20 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\AccountRequest;
+use App\Http\Requests\PhotoRequest;
 use App\Models\Account;
-use App\Models\AccountUserPermission;
-use App\Services\AccountService;
+use App\Models\Photo;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
-use Exception;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Gate;
 
-class AccountController extends Controller
+class PhotoController extends Controller
 {
 
-    protected AccountService $accountservice;
+    protected PhotoService $photoService;
 
-    public function __construct(AccountService $accountservice){
-        $this->accountservice = $accountservice;
+    public function __construct(PhotoService $photoService){
+        $this->photoService = $photoService;
     }
     /**
      * Display a listing of the resource.
@@ -29,43 +25,41 @@ class AccountController extends Controller
      */
     public function index(): View
     {
-        $accounts = $this->accountservice->index();
-        return view('accounts.index', compact('accounts'));
+        $photos = $this->photoService->index();
+        return view('photos.index', compact('photos'));
     }
 
     /**
      * Show the form for creating a new resource.
      *
-     * @return View
+     * @param
+     * @return
      */
-    public function create(): View
+    public function create()
     {
-        return view('accounts.create');
+        //
     }
 
     /**
      * Store a newly created resource in storage.
      *
-     * @param  AccountRequest  $request
-     * @return RedirectResponse
+     * @param  PhotoRequest  $request
+     * @return Photo
      */
-    public function store(AccountRequest $request): RedirectResponse
+    public function store(PhotoRequest $request): RedirectResponse
     {
-        $account_id = $this->accountservice->store($request);
-
-        return redirect(route('accounts.show',[$account_id]));
+        return $this->photoService->store($request);
     }
 
     /**
      * Display the specified resource.
      *
-     * @param  $id
-     * @return View
+     * @param
+     * @return
      */
-    public function show($id): VIew
+    public function show()
     {
-        return $this->accountservice->show($id);
-
+        //
     }
 
     /**
@@ -85,14 +79,14 @@ class AccountController extends Controller
      * Update the specified resource in storage.
      *
      * @param  AccountRequest  $request
-     * @param  Account $account
+     * @param  $id - id of account being updated
      * @return RedirectResponse
      */
-    public function update(AccountRequest $request, Account $account): RedirectResponse
+    public function update(AccountRequest $request, $id): RedirectResponse
     {
 
-        $this->accountservice->update($request,$account);
-        return redirect(route('accounts.show',$account->id));
+        $account = $this->accountservice->update($request,$id);
+        return redirect(route('accounts.index'));
     }
 
     /**

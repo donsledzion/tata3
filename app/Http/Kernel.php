@@ -2,6 +2,11 @@
 
 namespace App\Http;
 
+use App\Http\Middleware\AllowedToPublish;
+use App\Http\Middleware\HasKidsToFollow;
+use App\Http\Middleware\IsAdmin;
+use App\Http\Middleware\IsNotParent;
+use App\Http\Middleware\IsParent;
 use Illuminate\Foundation\Http\Kernel as HttpKernel;
 
 class Kernel extends HttpKernel
@@ -62,5 +67,10 @@ class Kernel extends HttpKernel
         'signed' => \Illuminate\Routing\Middleware\ValidateSignature::class,
         'throttle' => \Illuminate\Routing\Middleware\ThrottleRequests::class,
         'verified' => \Illuminate\Auth\Middleware\EnsureEmailIsVerified::class,
+        'has_kids' => HasKidsToFollow::class,
+        'parent' => IsParent::class,
+        'accountless' => IsNotParent::class,
+        'admin' => IsAdmin::class,
+        'publisher' => AllowedToPublish::class,
     ];
 }

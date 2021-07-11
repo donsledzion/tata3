@@ -97,7 +97,7 @@ class User extends Authenticatable
 
     public function accounts():belongsToMany
     {
-        return $this->belongsToMany(Account::class, 'account_user_permission')->withPivot('permission_id');
+        return $this->belongsToMany(Account::class,'account_user_permission')->withPivot('permission_id');
     }
 
     public function created_posts():hasMany
@@ -107,12 +107,39 @@ class User extends Authenticatable
 
     public function kids()
     {
-        $kids = collect();
-        foreach($this->accounts as $account){
-            foreach($account->kids as $kid) {
-                $kids->push($kid);
+        if($this->accounts) {
+            $this->load(['accounts.kids' => function ($query) use (&$kids) {
+                $kids = $query->get()->unique();
+            }]);
+            if ($kids) {
+                return $kids;
             }
         }
-        return $kids;
+        return null;
+    }
+
+    public function posts()
+    {
+        $this->load(['accounts.posts'=> function($query) use (&$posts){
+
+            $posts = $query->orWhere('status_id','=','4')->orderBy('said_at','desc')->paginate(10)->unique();
+        }]);
+
+        if(!empty($posts)) {
+            try {
+                $related_post = $posts->filter(function ($value, $key) {
+
+                    if(($value->status_id = 4)|| ($value->status_id >= $value->kid->account->users->where('id', '=', Auth::id())->first()->pivot->permission_id)) {
+                        return true;
+                    }
+                });
+            } catch(\Exception $e){
+                error_log("Błąd filtrowania postów!");
+                error_log("Error message: ".$e->getMessage());
+                return null;
+            }
+            return $related_post->all();
+        }
+        return null;
     }
 }

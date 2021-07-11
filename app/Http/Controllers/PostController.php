@@ -7,8 +7,10 @@ use App\Models\Account;
 use App\Models\Post;
 use App\Models\PostStatus;
 use App\Services\PostService;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\View\View;
 
@@ -81,34 +83,35 @@ class PostController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\Models\Post  $post
-     * @return \Illuminate\Http\Response
+     * @param  Post  $post
+     * @return View
      */
-    public function edit(Post $post)
+    public function edit(Post $post):View
     {
-        //
+        return $this->postService->edit($post);
     }
 
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\Post  $post
-     * @return \Illuminate\Http\Response
+     * @param  Request  $request
+     * @param  Post  $post
+     * @return RedirectResponse
      */
-    public function update(Request $request, Post $post)
+    public function update(Request $request, Post $post):RedirectResponse
     {
-        //
+        $this->postService->update($request, $post);
+        return redirect(route('postsfeed.index'));
     }
 
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Models\Post  $post
-     * @return \Illuminate\Http\Response
+     * @param  $id
+     * @return JsonResponse
      */
-    public function destroy(Post $post)
+    public function destroy($id):JsonResponse
     {
-        //
+        return $this->postService->delete($id);
     }
 }

@@ -14,9 +14,7 @@ class UpdateAccountUserPermissionTable extends Migration
     public function up()
     {
         Schema::table('account_user_permission', function(Blueprint $table){
-            /*$table->dropForeign(['account_id']);
-            $table->dropForeign(['user_id']);*/
-            //$table->dropPrimary(['account_id','user_id']);
+
             $table->id()->first();
         });
     }

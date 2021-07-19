@@ -1,6 +1,6 @@
 <?php
 return [
-    'parents'   => 'Parents',
-    'relatives' => 'Relatives',
-    'friends'   => 'Friends',
+    'parents'   => 'Rodzic',
+    'relatives' => 'Rodzina',
+    'friends'   => 'Znajomi',
 ];

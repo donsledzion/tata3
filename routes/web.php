@@ -2,7 +2,9 @@
 
 use App\Http\Controllers\AccountUserPermissionController;
 use App\Http\Controllers\FriendController;
+use App\Http\Controllers\InvitationController;
 use App\Http\Controllers\PostController;
+use App\Http\Controllers\RequestToFollowController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\AccountController;
@@ -41,8 +43,9 @@ Route::post('/posts/{post}',    [PostController::class, 'update'])->name('posts.
 //****************************************************************************************************************************
 // User routes
 //****************************************************************************************************************************
-Route::get('/users/list',       [UserController::class, 'index'])->name('users.index')->middleware('auth','admin');
-Route::delete('/users/{user}',  [UserController::class, 'destroy'])->name('users.destroy')->middleware('auth','admin');
+Route::get('/users/list',                       [UserController::class, 'index'])->name('users.index')->middleware('auth','admin');
+Route::get('/users/find_by_email/{email}',      [UserController::class, 'findByEmail'])->name('users.find.email')->middleware('auth');
+Route::delete('/users/{user}',                  [UserController::class, 'destroy'])->name('users.destroy')->middleware('auth','admin');
 
 
 //****************************************************************************************************************************
@@ -72,10 +75,32 @@ Route::delete('/accounts/{account}',    [AccountController::class, 'destroy'])->
 Route::get('/accountuserpermission',[AccountUserPermissionController::class, 'store'])
     ->name('accountuserpermission.store')
     ->middleware('auth');
+Route::put('/accountuserpermission/{accountuserpermisson}',[AccountUserPermissionController::class, 'update'])
+    ->name('accountuserpermission.update')
+    ->middleware('auth','parent');
+
 
 //****************************************************************************************************************************
 // Friends routes
 //****************************************************************************************************************************
-Route::get('/friends',                 [FriendController::class, 'index'])->name('friends.index')->middleware('auth');
+Route::get('/friends',                  [FriendController::class, 'index'])->name('friends.index')->middleware('auth');
+Route::post('/friends/{invitation}',    [FriendController::class, 'store'])->name('friends.store')->middleware('auth');
+Route::delete('/friends/{friend}',      [FriendController::class, 'destroy'])->name('friends.destroy')->middleware('auth');
+
+//****************************************************************************************************************************
+// Invitations routes
+//****************************************************************************************************************************
+Route::post('/invitations',                [InvitationController::class, 'store'])->name('invitations.store')->middleware('auth');
+Route::post('/invitations/{invitation}',   [InvitationController::class, 'accept'])->name('invitations.accept')->middleware('auth');
+Route::delete('/invitations/{invitation}', [InvitationController::class, 'destroy'])->name('invitations.destroy')->middleware('auth');
+
+
+//****************************************************************************************************************************
+// RequestToFollow routes
+//****************************************************************************************************************************
+Route::post('/requeststofollow',                        [RequestToFollowController::class, 'store'])->name('requeststofollow.store')->middleware('auth');
+Route::post('/requeststofollow/{requesttofollow}',      [RequestToFollowController::class, 'accept'])->name('requeststofollow.accept')->middleware('auth');
+Route::delete('/requeststofollow/{requesttofollow}',    [RequestToFollowController::class, 'destroy'])->name('requeststofollow.destroy')->middleware('auth');
+
 
 require __DIR__.'/auth.php';

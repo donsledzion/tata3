@@ -36,7 +36,6 @@ class AccountUserPermissionRepository
 
         return $accountuserpermission->save();
 
-        //return $this->accountuserpermission->create($attributes);
     }
 
 

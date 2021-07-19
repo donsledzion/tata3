@@ -72,7 +72,7 @@ class KidController extends Controller
      */
     public function edit(Kid $kid):View
     {
-        return $this->kidService->edit($kid);
+            return $this->kidService->edit($kid);
     }
 
     /**

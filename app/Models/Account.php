@@ -53,4 +53,25 @@ class Account extends Model
     {
         return $this->hasManyThrough(Post::class,Kid::class);
     }
+
+    public function requests():hasMany
+    {
+        return $this->hasMany(RequestToFollow::class,'account_id');
+    }
+
+    public function permission(User $user)
+    {
+        if($this->users->contains($user)){
+            return AccountUserPermission::where('account_id','=',$this->id)->where('user_id','=',$user->id)->first();
+        }
+        return null;
+    }
+
+    public function lastPost()
+    {
+        $posts = $this->posts;
+        return $posts->SortByDesc("said_at")->first();
+    }
+
+
 }

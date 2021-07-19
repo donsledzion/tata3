@@ -38,9 +38,6 @@ class KidRepository
         $attributes = $request->validated();
 
         if(empty($attributes['dim_name'])){
-            error_log("dim_name: ".$attributes['dim_name']);
-            error_log("first_name: ".$attributes['first_name']);
-
             $attributes['dim_name'] = $attributes['first_name'] ;
         }
 
@@ -116,8 +113,9 @@ class KidRepository
             $kid->delete();
 
             return response()->json([
-                'status' => 'success'
-            ]);
+                'status' => 'success',
+                'message' => 'Usunięto profil Bombelka!',
+            ])->setStatusCode(200);;
         } catch (\Exception $e){
             return response()->json([
                 'status' => 'fail',

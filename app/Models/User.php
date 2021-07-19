@@ -95,6 +95,13 @@ class User extends Authenticatable
         return false;
     }
 
+    public function account()
+    {
+        $account = Account::find($this->isParentToAccount());
+
+        return $account;
+    }
+
     public function accounts():belongsToMany
     {
         return $this->belongsToMany(Account::class,'account_user_permission')->withPivot('permission_id');
@@ -120,11 +127,17 @@ class User extends Authenticatable
 
     public function posts()
     {
-        $this->load(['accounts.posts'=> function($query) use (&$posts){
+        $user = User::find(Auth::id());
 
-            $posts = $query->orWhere('status_id','=','4')->orderBy('said_at','desc')->paginate(10)->unique();
-        }]);
+        if(!$user->accounts->isEmpty()) {
+            $this->load(['accounts.posts' => function ($query) use (&$posts) {
+                $posts = $query->orWhere('status_id', '=', '4')->orderBy('said_at', 'desc')->paginate(10)->unique();
+            }]);
+        } else {
 
+            $posts = Post::where('status_id', '=', '4')->orderBy('said_at', 'desc')->paginate(10)->unique();
+            return $posts->all();
+        }
         if(!empty($posts)) {
             try {
                 $related_post = $posts->filter(function ($value, $key) {
@@ -142,4 +155,28 @@ class User extends Authenticatable
         }
         return null;
     }
+
+    public function invites():hasMany{
+        return $this->hasMany(Invitation::class,'inviting_id');
+    }
+
+    public function invited():hasMany{
+        return $this->hasMany(Invitation::class,'invited_id');
+    }
+
+    public function requests():hasMany{
+        return $this->hasMany(RequestToFollow::class,'requesting_id');
+    }
+
+    public function permission(Account $account=null)
+    {
+        if(!$account){
+            $account = Account::find(User::find(Auth::id())->isParentToAccount());
+        }
+        if($this->accounts->contains($account)){
+            return AccountUserPermission::where('account_id','=',$account->id)->where('user_id','=',$this->id)->first();
+        }
+        return null;
+    }
+
 }

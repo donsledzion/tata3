@@ -8,6 +8,7 @@ use http\Env\Response;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -28,6 +29,16 @@ class UserController extends Controller
     public function index()
     {
         return $this->userService->index();
+    }
+
+    /**
+     * Returns a list of users related with logged-in user
+     *
+     * @return BelongsToMany
+     */
+    public function indexRelated():BelongsToMany
+    {
+        return $this->userService->indexRelated();
     }
 
     /**
@@ -60,6 +71,20 @@ class UserController extends Controller
     public function show($id)
     {
         //
+    }
+
+    /**
+     * Returns User given by e-mail adress
+     *
+     * @param  String  $email
+     * @return JsonResponse
+     */
+    public function findByEmail($email):JsonResponse
+    {
+        error_log("=====================================");
+        error_log("Got here!");
+        error_log("=====================================");
+        return $this->userService->findByEmail($email);
     }
 
     /**

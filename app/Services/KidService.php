@@ -37,16 +37,39 @@ class KidService
 
     public function update(StoreKidRequest $request, Kid $kid)
     {
-        return $this->kid->update($request, $kid);
+        $user = User::find(Auth::id());
+        if($user->isParentToAccount()==$kid->account_id) {
+            return $this->kid->update($request, $kid);
+        }
+        $response = [
+            'status' => 'fail',
+            'message' => 'Błąd edycji - brak uprawnień',
+        ];
+        return View('denied',$response);
     }
 
     public function edit(Kid $kid)
     {
-        return $this->kid->edit($kid);
+        $user = User::find(Auth::id());
+        if($user->isParentToAccount()==$kid->account_id) {
+            return $this->kid->edit($kid);
+        }
+        $response = [
+            'status' => 'fail',
+            'message' => 'Błąd edycji - brak uprawnień',
+        ];
+        return View('denied',$response);
     }
 
     public function delete(Kid $kid)
     {
-        return $this->kid->delete($kid);
+        $user = User::find(Auth::id());
+        if($user->isParentToAccount()==$kid->account_id) {
+            return $this->kid->delete($kid);
+        }
+        return response()->json([
+            'status' => 'fail',
+            'message' => 'Błąd kasowania - brak uprawnień!',
+        ])->setStatusCode(403);
     }
 }

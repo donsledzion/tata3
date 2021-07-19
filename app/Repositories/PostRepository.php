@@ -116,10 +116,10 @@ class PostRepository
                 $picture_to_delete->unlinkPicture($post_kid->account_id,$post_picture);
 
             }
-
             return response()->json([
-                'status' => 'success'
-            ]);
+                'status' => 'success',
+                'message' => 'Usunięto post!',
+            ])->setStatusCode(200);
         } catch (\Exception $e){
             error_log("==================================================================");
             error_log("Wyjebka przy usuwaniu pliku.");

@@ -77,6 +77,11 @@
             </table>
             @section('javascript')
                 const deleteUrl = "{{ url('users') }}/" ;
+                const confirmDelete = "{{ __('kidbook.messages.delete_user_confirm') }}";
+                const contents = "{{ __('kidbook.messages.delete_user_contents') }}";
+                const yesResponse = "{{ __('kidbook.messages.yes_response') }}";
+                const noResponse = "{{ __('kidbook.messages.no_response') }}";
+
             @endsection
 
             @section('js-files')

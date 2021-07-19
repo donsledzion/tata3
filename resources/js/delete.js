@@ -1,22 +1,30 @@
 $(function(){
     $('.delete').click(function(){
         Swal.fire({
-            title: 'Usunąć wpis?',
-            text: "Tej operacji nie da się cofnąć!",
+            title: confirmDelete,
+            text: contents,
             icon: 'warning',
             showCancelButton: true,
             confirmButtonColor: '#3085d6',
             cancelButtonColor: '#d33',
-            confirmButtonText: 'Tak, usuń!',
-            cancelButtonText: 'Nie, pomyłka!'
+            confirmButtonText: yesResponse,
+            cancelButtonText: noResponse
         }).then((result) => {
             if (result.isConfirmed) {
                 $.ajax({
                     method: "DELETE",
                     url: deleteUrl + $(this).data("class")+ "/" + $(this).data("id")
                 })
-                    .done(function( response ) {
-                        window.location.reload();
+                    .done(function( data ) {
+                        Swal.fire({
+                            icon: 'success',
+                            title: 'Gratulacje',
+                            text: data.message + ''
+                        }).then((result)=>{
+                            if (result.isConfirmed) {
+                                window.location.reload();
+                            }
+                        });
                     })
                     .fail(function(data){
                         Swal.fire({

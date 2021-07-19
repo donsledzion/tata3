@@ -6,7 +6,9 @@ namespace App\Services;
 use App\Http\Requests\AccountRequest;
 use App\Models\Account;
 use App\Models\AccountUserPermission;
+use App\Models\Invitation;
 use App\Models\Photo;
+use App\Models\User;
 use App\Repositories\AccountRepository;
 use Exception;
 use Illuminate\Database\Eloquent\Model;
@@ -79,15 +81,36 @@ class AccountService
         }
     }
 
-    public function update(Request $request, Account $account){
+    public function edit($id){
+        $user = User::find(Auth::id());
+        $account = $this->account->find($id);
+        if(!empty($account)&&($user->isParentToAccount()==$account->id)){
+            return view("accounts.edit", [
+                'account' => $account
+            ] );
+        } else {
+            return view("posts.index" );
+        }
+    }
 
-        return $this->account->update($request, $account);
+    public function update(Request $request, Account $account){
+        $user = User::find(Auth::id());
+        if($user->isParentToAccount()==$account->id) {
+            return $this->account->update($request, $account);
+        }
+        return response()->json([
+                'status' => 'fail',
+                'message' => 'Błąd edycji - brak uprawnień!'])
+            ->setStatusCode(403);
     }
 
     public function delete($id){
         try {
+            $user = User::find(Auth::id());
             $account = $this->account->find($id);
-
+            if(($account->id)!=$user->isParentToAccount()){
+                Throw new Exception();
+            }
             foreach ($account->kids as $kid) {
                 $kid->deleteWithPicture();
             }
@@ -96,19 +119,19 @@ class AccountService
 
             $picture_to_delete->unlinkPicture($account->id,$account->avatar);
 
-            $relations = AccountUserPermission::all();
-            error_log("============================================");
-            error_log("Relations:".$relations);
-            error_log("============================================");
+
+            $relations = AccountUserPermission::where('account_id','=',$account->id)->get();
 
             foreach ($relations as $relation){
 
-                if($relation->account->id == $account->id){
-                    error_log("============================================");
-                    error_log("Deleting relations: ".$relation);
-                    error_log("============================================");
                     $relation->delete();
-                }
+            }
+
+            $invitations = Invitation::where('account_id','=',$account->id)->get();
+
+            foreach ($invitations as $invitation){
+
+                $invitation->delete();
             }
 
             $account_id = $account->id;

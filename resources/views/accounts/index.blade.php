@@ -4,14 +4,14 @@
             <div class="grid grid-cols-2">
                 <div class="float-left">
                     <h1 class="font-semibold text-xl text-gray-800 leading-tight">
-                        {{ __('Accounts') }}
+                        {{ __('kidbook.account.accounts') }}
                     </h1>
                 </div>
                 <div class="float-right">
                     @if (Illuminate\Support\Facades\Gate::forUser(Illuminate\Support\Facades\Auth::user())->allows('create-account'))
                     <a class="float-right" href="{{route('accounts.create')}}">
                         <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
-                            {{__('Add account')}}
+                            {{__('kidbook.button.add_account')}}
                         </button>
                     </a>
                     @endif
@@ -30,7 +30,7 @@
                     </th>
                     <th class="p-2 border-r cursor-pointer text-sm font-thin text-gray-500">
                         <div class="flex items-center justify-center">
-                            {{__('ID')}}
+                            {{__('kidbook.misc.id')}}
                             <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 9l4-4 4 4m0 6l-4 4-4-4" />
                             </svg>
@@ -38,7 +38,7 @@
                     </th>
                     <th class="p-2 border-r cursor-pointer text-sm font-thin text-gray-500">
                         <div class="flex items-center justify-center">
-                            {{__('Name')}}
+                            {{__('kidbook.account.name')}}
                             <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 9l4-4 4 4m0 6l-4 4-4-4" />
                             </svg>
@@ -46,7 +46,7 @@
                     </th>
                     <th class="p-2 border-r cursor-pointer text-sm font-thin text-gray-500">
                         <div class="flex items-center justify-center">
-                            {{__('Avatar')}}
+                            {{__('kidbook.account.picture')}}
                             <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 9l4-4 4 4m0 6l-4 4-4-4" />
                             </svg>
@@ -54,7 +54,7 @@
                     </th>
                     <th class="p-2 border-r cursor-pointer text-sm font-thin text-gray-500">
                         <div class="flex items-center justify-center">
-                            {{__('Kids')}}
+                            {{__('kidbook.kid.kids')}}
                             <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 9l4-4 4 4m0 6l-4 4-4-4" />
                             </svg>
@@ -62,7 +62,7 @@
                     </th>
                     <th class="p-2 border-r cursor-pointer text-sm font-thin text-gray-500">
                         <div class="flex items-center justify-center">
-                            {{__('Users')}}
+                            {{__('kidbook.account.members')}}
                             <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 9l4-4 4 4m0 6l-4 4-4-4" />
                             </svg>
@@ -70,7 +70,7 @@
                     </th>
                     <th class="p-2 border-r cursor-pointer text-sm font-thin text-gray-500">
                         <div class="flex items-center justify-center">
-                            {{__('Actions')}}
+                            {{__('kidbook.misc.actions')}}
                             <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 9l4-4 4 4m0 6l-4 4-4-4" />
                             </svg>
@@ -100,9 +100,9 @@
                         @endforeach
                     </td>
                     <td>
-                        <a href="{{ route('accounts.show',$account->id) }}"     class="bg-green-500 p-2 text-white hover:shadow-lg text-xs fo   nt-thin">{{__('View')}}</a>
-                        <a href="{{ route('accounts.edit',$account->id) }}"     class="bg-blue-500 p-2 text-white hover:shadow-lg text-xs font-thin">{{__('Edit')}}</a>
-                        <button class="bg-red-500 p-2 delete text-white hover:shadow-lg text-xs font-thin" data-id="{{ $account->id }}" data-class="accounts">{{__('Delete')}}</button>
+                        <a href="{{ route('accounts.show',$account->id) }}"     class="bg-green-500 p-2 text-white hover:shadow-lg text-xs fo   nt-thin">{{__('kidbook.button.view')}}</a>
+                        <a href="{{ route('accounts.edit',$account->id) }}"     class="bg-blue-500 p-2 text-white hover:shadow-lg text-xs font-thin">{{__('kidbook.button.edit')}}</a>
+                        <button class="bg-red-500 p-2 delete text-white hover:shadow-lg text-xs font-thin" data-id="{{ $account->id }}" data-class="accounts">{{__('kidbook.button.delete')}}</button>
                     </td>
                 </tr>
                 @endforeach
@@ -111,6 +111,7 @@
             {{ $accounts->links() }}
             @section('javascript')
                 const deleteUrl = "{{ url('') }}/" ;
+                const confirmDelete = "{{ __('kidbook.messages.delete_confirm') }}"
             @endsection
 
             @section('js-files')

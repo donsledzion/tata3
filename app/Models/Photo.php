@@ -45,16 +45,19 @@ class Photo extends Model
             error_log("PHOTO MODEL | file_name: ". $file_name);
             error_log("===============================================");
             if(!empty($request->file('avatar'))) {
+                error_log("OPTION 1 - avatar");
                 $name = Str::ascii(Str::snake($file_name.'.'.$request->file('avatar')->extension(),'_'),'pl');
                 $path = $request->file('avatar')->storeAs('tmp', $name);
             } else if(!empty($request->file('picture'))) {
+                error_log("OPTION 2 - picture");
                 $name = Str::ascii(Str::snake($file_name.'.'.$request->file('picture')->extension(),'_'),'pl');
                 $path = $request->file('picture')->storeAs('tmp', $name);
             } else {
+                error_log("OPTION 3 - gender");
                 $gender = Gender::find($request->gender);
                 $name = Str::ascii(Str::snake($file_name.'.png','_'),'pl');
                 error_log("Default picture -> name: ".$name);
-                Storage::copy('defaults/default_'.__($gender->name).'.png', 'tmp/' . $name);
+                Storage::copy('defaults/default_gender_'.__($gender->id).'.png', 'tmp/' . $name);
                 $path = 'tmp/'.$name;
                 error_log("Default picture -> path: ".$path);
             }

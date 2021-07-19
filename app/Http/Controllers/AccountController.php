@@ -76,9 +76,7 @@ class AccountController extends Controller
      */
     public function edit($id): View
     {
-        return view('accounts.edit', [
-           'account' => $this->accountservice->show($id)
-        ]);
+        return $this->accountservice->edit($id);
     }
 
     /**

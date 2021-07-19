@@ -2,17 +2,28 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Account;
+use App\Models\AccountUserPermission;
+use App\Models\Invitation;
+use App\Models\Permission;
 use App\Models\User;
-use http\Env\Response;
-use Illuminate\Contracts\Foundation\Application;
-use Illuminate\Contracts\View\Factory;
+use App\Services\FriendService;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Auth;
 
 class FriendController extends Controller
 {
+
+    public FriendService $friendService;
+
+    public function __construct(FriendService $friendService){
+        $this->friendService = $friendService;
+    }
+
+
+
     /**
      * Display a listing of the resource.
      *
@@ -20,7 +31,16 @@ class FriendController extends Controller
      */
     public function index()
     {
-        return view('friends.index');
+        $user = User::find(Auth::id()) ;
+        $account = Account::find($user->isParentToAccount());
+        $permissions = Permission::all();
+
+
+        return view('friends.index',[
+            'user' => $user,
+            'account' => $account,
+            'permissions' => $permissions,
+        ]);
     }
 
     /**
@@ -30,18 +50,38 @@ class FriendController extends Controller
      */
     public function create()
     {
-        //
+
     }
 
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
+     * @param  int $id
+     * @return JsonResponse
      */
-    public function store(Request $request)
+    public function store($id):JsonResponse
     {
-        //
+
+        $invitation = Invitation::find($id);
+
+        $permissionRequest = [
+            'account_id'=>$invitation->account->id,
+            'user_id'=>$invitation->invited->id,
+            'permission_id'=>$invitation->permission->id,
+        ];
+        $storeInvitationResponse = app('App\Http\Controllers\AccountUserPermissionController')
+            ->store($permissionRequest);
+
+        $deleteInvitationResponse = app('App\Http\Controllers\InvitationController')
+            ->destroy($id);
+
+        $storeResponse = json_decode($storeInvitationResponse->getContent(), true);
+        $deleteResponse = json_decode($deleteInvitationResponse->getContent(), true);
+
+        return response()->json([
+        'status' => 'success',
+        'message' => 'Pomyślnie zaakceptowano zaproszenie!',
+    ])->setStatusCode(200);
     }
 
     /**
@@ -84,8 +124,8 @@ class FriendController extends Controller
      * @param  int  $id
      * @return JsonResponse
      */
-    public function destroy(User $user): JsonResponse
+    public function destroy($id): JsonResponse
     {
-     //
+        return $this->friendService->delete($id);
     }
 }

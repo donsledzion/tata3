@@ -6,12 +6,12 @@
             </a>
         </x-slot>
         <x-slot name="title">
-            {{__('Edit family')}}
+            {{__('edit_title')}}
         </x-slot>
         <!-- Validation Errors -->
         <x-auth-validation-errors class="mb-4" :errors="$errors" />
 
-        <form method="POST" action="{{ route('accounts.update', $account) }}" enctype="multipart/form-data">
+        <form method="POST" action="{{ route('accounts.update', $account->id) }}" enctype="multipart/form-data">
             @csrf
 
             <!-- Account name -->
@@ -22,7 +22,7 @@
             </div>
 
             <div class="py-1">
-                <span class="px-1 text-sm text-gray-600">{{__('Bio')}}: {{__('(optional)')}}</span>
+                <span class="px-1 text-sm text-gray-600">{{__('kidbook.account.bio')}}: {{__('kidbook.misc.optional')}}</span>
                 <textarea id="bio" name="bio" rows="6" class="text-md block px-3 py-2 rounded-lg w-full bg-white border-2 border-gray-300 placeholder-gray-600
                                      shadow-md focus:placeholder-gray-500 focus:bg-white focus:border-gray-600 focus:outline-none">{{$account->bio, old('bio')}}</textarea>
             </div>
@@ -38,10 +38,10 @@
                                class="cursor-pointer relative block opacity-0 w-full h-full p-20 z-50" >
                         <div class="text-center p-10 absolute top-0 right-0 left-0 m-auto" >
                             <h4>
-                                {{__('Drop picture here')}}
-                                <br/>{{__('or')}}
+                                {{__('kidbook.misc.picture_dropdown_1')}}
+                                <br/>{{__('kidbook.misc.picture_dropdown_2')}}
                             </h4>
-                            <p class="">{{__('select from device')}}</p>
+                            <p class="">{{__('kidbook.misc.picture_dropdown_3')}}</p>
                         </div>
                     </div>
                 </div>
@@ -50,7 +50,7 @@
             <div class="flex items-center justify-end mt-4">
 
                 <x-button class="ml-4">
-                    {{ __('Save edition') }}
+                    {{ __('kidbook.button.save') }}
                 </x-button>
             </div>
         </form>

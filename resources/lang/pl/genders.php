@@ -1,6 +1,6 @@
 <?php
 return [
-    'male' => 'Male',
-    'female' => 'Female',
-    'other' => 'Other',
+    'male' => 'Chłopak',
+    'female' => 'Dziewczę',
+    'other' => 'Inna',
 ];

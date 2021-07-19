@@ -35,7 +35,7 @@
                 </div>
                 @endif
                 <div class="hidden space-x-8 sm:-my-px sm:ml-2 sm:flex">
-                    <x-nav-link :href="route('users.index')" :active="request()->routeIs('dashboard')">
+                    <x-nav-link :href="route('friends.index')" :active="request()->routeIs('dashboard')">
                         {{ __('Friends') }}
                     </x-nav-link>
                 </div>
@@ -80,9 +80,10 @@
 
                         <x-dropdown-link :href="route('kids.index')">{{ __('Kids') }}</x-dropdown-link>
 
+                        <x-dropdown-link :href="route('friends.index')">{{ __('Friends') }}</x-dropdown-link>
+
                         <form method="POST" action="{{ route('logout') }}">
                             @csrf
-
 
                             <x-dropdown-link :href="route('logout')"
                                              onclick="event.preventDefault();
@@ -145,6 +146,8 @@
                 @endif
 
                 <x-dropdown-link :href="route('kids.index')">{{ __('Bombelki') }}</x-dropdown-link>
+
+                <x-dropdown-link :href="route('friends.index')">{{ __('Friends') }}</x-dropdown-link>
 
                 <form method="POST" action="{{ route('logout') }}">
                     @csrf

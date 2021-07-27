@@ -134,15 +134,13 @@ class User extends Authenticatable
                 $posts = $query->orWhere('status_id', '=', '4')->orderBy('said_at', 'desc')->paginate(10)->unique();
             }]);
         } else {
-
             $posts = Post::where('status_id', '=', '4')->orderBy('said_at', 'desc')->paginate(10)->unique();
             return $posts->all();
         }
         if(!empty($posts)) {
             try {
                 $related_post = $posts->filter(function ($value, $key) {
-
-                    if(($value->status_id = 4)|| ($value->status_id >= $value->kid->account->users->where('id', '=', Auth::id())->first()->pivot->permission_id)) {
+                    if(($value->status_id == 4)|| ((($value->status_id) >= ($value->kid->account->users->where('id', '=', Auth::id())->first()->pivot->permission_id)))) {
                         return true;
                     }
                 });

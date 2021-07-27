@@ -51,9 +51,9 @@ class AccountController extends Controller
      */
     public function store(AccountRequest $request): RedirectResponse
     {
-        $account_id = $this->accountservice->store($request);
+        return $this->accountservice->store($request);
 
-        return redirect(route('accounts.show',[$account_id]));
+        //return redirect(route('accounts.show',[$account_id]));
     }
 
     /**
@@ -88,9 +88,7 @@ class AccountController extends Controller
      */
     public function update(AccountRequest $request, Account $account): RedirectResponse
     {
-
-        $this->accountservice->update($request,$account);
-        return redirect(route('accounts.show',$account->id));
+        return $this->accountservice->update($request,$account);
     }
 
     /**

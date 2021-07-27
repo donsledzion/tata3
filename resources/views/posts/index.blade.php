@@ -12,9 +12,12 @@
         </x-slot>
 
         <!-- component -->
+
+            <input type="text" id="feeds-param" name="feeds-param" value="@if($kid){{$kid->id}}@endif" >
+
         <div class="table w-full p-2">
         <!-- -->
-        <div class="py-20 bg-gray-300">
+        <div class="py-20 bg-white-300" style="background-image: url({{asset('storage/components/backgrounds/watercolor.png')}})">
             <div id="data-wrapper">
                 <!-- Results -->
 
@@ -35,7 +38,13 @@
             const contents = "{{ __('kidbook.messages.delete_post_contents') }}";
             const yesResponse = "{{ __('kidbook.messages.yes_response') }}";
             const noResponse = "{{ __('kidbook.messages.no_response') }}";
+
+            //const parameter = "";
+            //const parameter = "/kid/1";
+
+
         @endsection
+
         @section('js-files')
             {{--<script src="{{ asset('js/delete.js') }}" ></script>--}}
 

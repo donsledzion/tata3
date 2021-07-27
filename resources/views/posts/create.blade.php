@@ -25,7 +25,7 @@
                     <div class="w-full relative">
                         <div class="md:mt-6">
                             <div class="text-center font-semibold text-black">
-                                {{__('kidbook.post.subtitle')}}
+                                {{__('kidbook.post.add_subtitle')}}
                             </div>
                             <!-- Validation Errors -->
                             <x-auth-validation-errors :errors="$errors" />

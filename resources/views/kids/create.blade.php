@@ -9,7 +9,8 @@
         <!-- component -->
         <script src="https://cdn.jsdelivr.net/gh/alpinejs/alpine@v2.x.x/dist/alpine.js" defer></script>
 
-        <div class="container max-w-full mx-auto md:py-24 px-6">
+        <div class="container max-w-full mx-auto md:py-24 px-6" style="background-image: url({{asset('storage/components/backgrounds/watercolor.png')}})" >
+            {{--background image comes from subtlepatterns--}}
 
             <div class="max-w-sm mx-auto px-6">
                 <div class="relative flex flex-wrap">
@@ -28,7 +29,7 @@
 
                     </div>
                     <x-auth-validation-errors class="mb-4" :errors="$errors" />
-                    <div class="w-full relative">
+                    <div class="w-full relative" style="background-color:white;">
                         <div class="md:mt-6">
                             <div class="text-center font-semibold text-black">
                                 {{__('kidbook.kid.add_subtitle_1')}}

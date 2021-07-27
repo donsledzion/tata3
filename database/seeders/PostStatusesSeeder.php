@@ -15,7 +15,7 @@ class PostStatusesSeeder extends Seeder
      */
     public function run()
     {
-        DB::table('post_status')->insert([
+        DB::table('post_statuses')->insert([
             ['name' => 'post_statuses.private',    'created_at' => Carbon::now(), 'updated_at' => Carbon::now(),],
             ['name' => 'post_statuses.relatives',  'created_at' => Carbon::now(), 'updated_at' => Carbon::now()],
             ['name' => 'post_statuses.friends',    'created_at' => Carbon::now(), 'updated_at' => Carbon::now()],

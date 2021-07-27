@@ -70,7 +70,8 @@ class AccountRepository
         }
         error_log("==================================================================");
 
-        return $edited_account->save();
+        $edited_account->save();
+        return redirect(route('accounts.show',$account->id));
     }
 
     public function delete($id) {

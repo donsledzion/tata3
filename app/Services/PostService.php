@@ -5,6 +5,7 @@ namespace App\Services;
 
 
 use App\Models\Account;
+use App\Models\Kid;
 use App\Models\Post;
 use App\Models\User;
 use App\Repositories\PostRepository;
@@ -22,24 +23,39 @@ class PostService
         return $this->post->all();
     }
 
-    public function feedPost(Request $request){
+    public function feedPost(Request $request, Kid $kid=null){
+
 
         $user=User::find(Auth::id());
-        $posts = $user->posts();
 
+        if($kid){
+            $posts = $kid->posts()->distinct()->paginate(10);
+        } else {
+            $posts = $user->posts();
+        }
 
+        if($request->ajax()) {
+            return $this->createFeeds($posts);
+        }
+        return view("posts.index", [
+            'kid'=>$kid
+        ]);
+    }
+
+    public function createFeeds($posts){
+        $user=User::find(Auth::id());
 
         $feed = '';
-        if($request->ajax()) {
             foreach($posts as $post) {
                 $posts_account = $post->kid->account;
                 $is_related = $user->permission($posts_account);
+                //error_log(asset("/storage"));
                 $feed.='<div class="h-auto px-2">
                 <div class="max-w-md mx-auto bg-white shadow-lg rounded-md overflow-hidden md:max-w-md">
                     <div class="md:flex">
                         <div class="w-full">
                             <div class="flex justify-between items-center p-3">
-                                <div class="flex flex-row items-center"> <img src="storage/'.$post->kid->account_id.'/160/'.$post->kid->avatar.'" class="rounded-full" width="40">
+                                <div class="flex flex-row items-center"> <img src="'.asset('storage/'.$post->kid->account_id.'/160/'.$post->kid->avatar).'" class="rounded-full" width="40">
                                     <div class="flex flex-row items-center ml-2"> <span class="font-bold mr-1">'.$post->kid->dim_name.'</span> <small class="h-1 w-1 bg-gray-300 rounded-full mr-1 mt-1"></small>
 
                                         <button class="follow-button text-red-600 text-sm hover:text-red-800"
@@ -47,8 +63,8 @@ class PostService
                                              data-user="'.$user->id.'"
                                              data-message="'.__('kidbook.request.default').'">
                                              <svg class="w-6 h-6" fill="';
-                                             if($is_related){$feed.='red';} else {$feed.='none';}
-                                             $feed.='" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"></path></svg>
+                if($is_related){$feed.='red';} else {$feed.='none';}
+                $feed.='" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"></path></svg>
                                          </button>
                                     </div>
                                 </div>
@@ -57,7 +73,7 @@ class PostService
                     $feed.='<a href="'.route('posts.edit',$post->id).'" class="bg-blue-500 p-2 edit text-white hover:shadow-lg text-xs font-thin" data-id="'.$post->id.'">'. __('Edit').'</a >
                             <button class="bg-red-500 p-2 delete text-white hover:shadow-lg text-xs font-thin" data-class="posts" data-id="'.$post->id.'" >'.__('Delete').'</button >';
                 }
-                            $feed.='<i class="fa fa-ellipsis-h text-gray-400 hover:cursor-pointer hover:text-gray-600"></i>
+                $feed.='<i class="fa fa-ellipsis-h text-gray-400 hover:cursor-pointer hover:text-gray-600"></i>
                                 </div>
                             </div>
                             <div class="flex justify-between items-center p-3">
@@ -65,7 +81,7 @@ class PostService
                                 <i>'.nl2br(e($post->sentence)).'</i>
                                 </blockquote>
                             </div>
-                            <div> <img src="storage/'.$post->kid->account_id.'/480/'.$post->picture.'"  class="w-full h-75"> </div>
+                            <div> <img src="'.asset('storage/'.$post->kid->account_id.'/480/'.$post->picture).'"  class="w-full h-75"> </div>
                             <div class="flex  right-0 p-2">
                                 <p><b>'.$post->said_at.'</b></p>
                             </div>
@@ -84,8 +100,6 @@ class PostService
             </div>';
             }
             return $feed;
-        }
-        return view("posts.index");
     }
 
     public function store(Request $request)

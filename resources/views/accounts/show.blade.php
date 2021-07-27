@@ -28,7 +28,11 @@
                 </p>
                 @if ((Illuminate\Support\Facades\Auth::user())->isParentToAccount()==$account->id)
                 <a href="{{ route('accounts.edit',$account->id) }}"     class="bg-blue-500 p-2 text-white hover:shadow-lg text-xs font-thin">{{__('kidbook.button.edit')}}</a>
-                <button class="bg-red-500 p-2 delete text-white hover:shadow-lg text-xs font-thin" data-class="accounts" data-id="{{ $account->id }}">{{__('kidbook.button.delete')}}</button>
+                <button class="bg-red-500 p-2 delete text-white hover:shadow-lg text-xs font-thin"
+                        data-class="accounts"
+                        data-id="{{ $account->id }}"
+                        data-prompt="{{__('kidbook.prompt.question.delete.account')}}"
+                >{{__('kidbook.button.delete')}}</button>
                 @endif
                 <div class="flex items-center justify-between mt-2 mx-6">
                 </div>
@@ -72,7 +76,11 @@
                         <div class="p-4">
                             @if(Illuminate\Support\Facades\Auth::user()->isParentToAccount()==$account->id)
                             <a href="{{ route('kids.edit',$kid->id) }}"     class="bg-blue-500 p-2 text-white hover:shadow-lg text-xs font-thin">{{__('kidbook.button.edit')}}</a>
-                            <button class="bg-red-500 p-2 delete text-white hover:shadow-lg text-xs font-thin"  data-id="{{ $kid->id }}" data-class="kids">{{__('kidbook.button.delete')}}</button>
+                            <button class="bg-red-500 p-2 delete text-white hover:shadow-lg text-xs font-thin"
+                                    data-id="{{ $kid->id }}"
+                                    data-class="kids"
+                                    data-prompt="{{__('kidbook.prompt.question.delete.kid')}}"
+                            >{{__('kidbook.button.delete')}}</button>
                             @endif
                             <p class="uppercase tracking-wide text-sm font-bold text-gray-700">{{$kid->first_name}}  {{$kid->last_name}}</p>
                             <p class="text-3xl text-gray-900">{{$kid->dim_name}}</p>

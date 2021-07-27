@@ -2,7 +2,7 @@ $(function(){
     $('.delete').click(function(){
         Swal.fire({
             title: confirmDelete,
-            text: contents,
+            text: $(this).data("prompt"),
             icon: 'warning',
             showCancelButton: true,
             confirmButtonColor: '#3085d6',

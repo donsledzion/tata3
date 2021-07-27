@@ -31,13 +31,14 @@ Route::get('/',                     [PostController::class, 'feedPosts'])->name(
 //****************************************************************************************************************************
 // Post routes
 //****************************************************************************************************************************
-Route::get('/posts',            [PostController::class, 'index'])->name('posts.index')->middleware('auth','admin');
-Route::get('/postsfeed',        [PostController::class, 'feedPosts'])->name('postsfeed.index')->middleware('auth');
-Route::get('/post/create',      [PostController::class, 'create'])->name('posts.create')->middleware('auth','publisher');
-Route::post('/posts',           [PostController::class, 'store'])->name('posts.store')->middleware('auth','publisher');
-Route::get('/posts/edit/{post}',[PostController::class, 'edit'])->name('posts.edit')->middleware('auth','publisher');
-Route::delete('/posts/{post}',  [PostController::class, 'destroy'])->middleware('auth','publisher');
-Route::post('/posts/{post}',    [PostController::class, 'update'])->name('posts.update')->middleware('auth','publisher');
+Route::get('/posts',                [PostController::class, 'index'])->name('posts.index')->middleware('auth','admin');
+Route::get('/postsFeed',            [PostController::class, 'feedPosts'])->name('postsFeed.index')->middleware('auth');
+Route::get('/postsFeed/kid/{kid}',  [PostController::class, 'feedPosts'])->name('postsFeed.byKid')->middleware('auth');
+Route::get('/post/create',          [PostController::class, 'create'])->name('posts.create')->middleware('auth','publisher');
+Route::post('/posts',               [PostController::class, 'store'])->name('posts.store')->middleware('auth','publisher');
+Route::get('/posts/edit/{post}',    [PostController::class, 'edit'])->name('posts.edit')->middleware('auth','publisher');
+Route::delete('/posts/{post}',      [PostController::class, 'destroy'])->middleware('auth','publisher');
+Route::post('/posts/{post}',        [PostController::class, 'update'])->name('posts.update')->middleware('auth','publisher');
 
 
 //****************************************************************************************************************************

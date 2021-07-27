@@ -89,7 +89,7 @@ return [
         'posts' => 'Cytaty',
         'add_title' => 'Dodaj cytat',
         'edit_title' => 'Edytuj cytat',
-        'add_subtitle' => 'Dodaj cytat',
+        'add_subtitle' => 'Dodaj cytat Bombelka:',
         'edit_subtitle' => 'Edytuj cytat',
         'quoted_kid' => 'Cytowany Bombelek',
         'picture' => 'Fotka',
@@ -136,4 +136,16 @@ return [
         'none' => 'brak',
         'as' => 'Jako:',
     ],
+
+    'prompt' =>[
+        'question'=>[
+            'unfollow' => 'Czy na pewno chcesz przestać obserwować to konto?',
+            'unplug' => 'Czy na pewno chcesz usunąć dostęp do konta dla tego użytkownika?',
+            'delete' =>[
+                'kid' => "Usunięcie Bombelka skasuje wszystkie jego cytaty!",
+                'account' => "Usunięcie Rodzinki skasuje wszystkie Bombelki i ich cytaty!",
+            ],
+        ],
+    ],
+
 ];

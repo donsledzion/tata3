@@ -65,8 +65,8 @@ class AccountService
             DB::rollBack();
             return $e->getMessage();
         }
-
-        return $newAccount;
+        //return $newAccount;
+        return redirect(route('accounts.show',[$newAccount]));
     }
 
     public function show($id){

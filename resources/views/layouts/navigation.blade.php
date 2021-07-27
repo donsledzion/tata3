@@ -23,7 +23,7 @@
                     @endif
                 </div>
                 <div class="hidden space-x-8 sm:-my-px sm:ml-2 sm:flex">
-                    <x-nav-link :href="route('postsfeed.index')" :active="request()->routeIs('dashboard')">
+                    <x-nav-link :href="route('postsFeed.index')" :active="request()->routeIs('dashboard')">
                         {{ __('Quotes') }}
                     </x-nav-link>
                 </div>
@@ -72,7 +72,7 @@
                         <x-dropdown-link :href="route('users.index')">{{ __('Users') }}</x-dropdown-link>
                         @endif
 
-                        <x-dropdown-link :href="route('postsfeed.index')">{{ __('Quotes') }}</x-dropdown-link>
+                        <x-dropdown-link :href="route('postsFeed.index')">{{ __('Quotes') }}</x-dropdown-link>
 
                         @if(Illuminate\Support\Facades\Auth::user()->isAdmin())
                             <x-dropdown-link :href="route('accounts.index')">{{ __('Accounts') }}</x-dropdown-link>
@@ -139,7 +139,7 @@
                 <x-dropdown-link :href="route('users.index')">{{ __('Użytkownicy') }}</x-dropdown-link>
                 @endif
 
-                <x-dropdown-link :href="route('postsfeed.index')">{{ __('Cytaty') }}</x-dropdown-link>
+                <x-dropdown-link :href="route('postsFeed.index')">{{ __('Cytaty') }}</x-dropdown-link>
 
                 @if(Illuminate\Support\Facades\Auth::user()->isAdmin())
                     <x-dropdown-link :href="route('accounts.index')">{{ __('Konta') }}</x-dropdown-link>

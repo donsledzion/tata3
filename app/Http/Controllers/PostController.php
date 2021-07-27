@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\StorePostRequest;
 use App\Models\Account;
+use App\Models\Kid;
 use App\Models\Post;
 use App\Models\PostStatus;
 use App\Services\PostService;
@@ -34,9 +35,13 @@ class PostController extends Controller
 
     }
 
-    public function feedPosts(Request $request)
+    public function feedPosts(Request $request, Kid $kid=null)
     {
-        return $this->postService->feedPost($request);
+        error_log("=============================================");
+        error_log("kid = ". $kid);
+        error_log("=============================================");
+
+        return $this->postService->feedPost($request, $kid);
     }
 
     /**

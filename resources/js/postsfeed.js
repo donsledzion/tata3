@@ -1,3 +1,8 @@
+var parameter = "" ;
+
+if($("#feeds-param").val()){
+    parameter = '/kid/' + $('#feeds-param').val();
+}
 
 var page = 1;
 infinteLoadMore(page);
@@ -23,7 +28,7 @@ function sleep(milliseconds) {
 
 function infinteLoadMore(page) {
     $.ajax({
-        url: deleteUrl + "postsfeed?page=" + page,
+        url: deleteUrl + "postsFeed" + parameter + "?page=" + page,
         datatype: "html",
         type: "get",
         beforeSend: function () {
@@ -112,11 +117,8 @@ function infinteLoadMore(page) {
                                     text: data.responseJSON.message
                                 });
                             });
-
                         }})
-
                     })()
-
                 });
             });
 
